@@ -1,0 +1,12 @@
+{:sync/joyride-files ["src/showtime.cljs"
+                      "src/flares.cljs"
+                      "src/prezo/**"
+                      "scripts/keybinding_palette.cljs"]
+ :sync/npm-deps ["posthtml-parser"
+                 "jsonc-parser"]
+ :sync/skills ["babashka"
+               "babashka-tasks"
+               "joyride"
+               "joyride-user-scripts"
+               "joyride-workspace-automation"
+               "next-slide-editor"]}
