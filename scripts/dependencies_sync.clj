@@ -42,10 +42,10 @@
                        :path resolved})))
     (str (fs/absolutize resolved))))
 
-(defn- resolve-global-copilot-skills-dir []
-  (let [resolved (str (fs/home) "/.copilot/skills/")]
+(defn- resolve-global-copilot-dir []
+  (let [resolved (str (fs/home) "/.copilot/")]
     (when-not (fs/exists? resolved)
-      (throw (ex-info (str "Global Copilot skills directory not found: " resolved)
+      (throw (ex-info (str "Global Copilot directory not found: " resolved)
                       {:babashka/exit 1
                        :path resolved})))
     (str (fs/absolutize resolved))))
@@ -61,27 +61,36 @@
     (let [config (edn/read-string (slurp config-file))
           joyride-files (get config :sync/joyride-files [])
           npm-deps (get config :sync/npm-deps [])
-          skills (get config :sync/skills [])]
-      ;; Validate types
-      (when-not (or (nil? joyride-files) (vector? joyride-files))
-        (throw (ex-info ":sync/joyride-files must be a vector of strings"
-                        {:babashka/exit 1
-                         :config config})))
-      (when-not (or (nil? npm-deps) (vector? npm-deps))
-        (throw (ex-info ":sync/npm-deps must be a vector of strings"
-                        {:babashka/exit 1
-                         :config config})))
-      (when-not (or (nil? skills) (vector? skills))
-        (throw (ex-info ":sync/skills must be a vector of strings"
-                        {:babashka/exit 1
-                         :config config})))
+          skills (get config :sync/skills [])
+          agents (get config :sync/agents [])
+          prompts (get config :sync/prompts [])
+          instructions (get config :sync/instructions false)]
+      ;; Validate vector types
+      (doseq [[k v] [[":sync/joyride-files" joyride-files]
+                      [":sync/npm-deps" npm-deps]
+                      [":sync/skills" skills]
+                      [":sync/agents" agents]
+                      [":sync/prompts" prompts]]]
+        (when-not (or (nil? v) (vector? v))
+          (throw (ex-info (str k " must be a vector of strings")
+                          {:babashka/exit 1
+                           :config config}))))
+      ;; Validate boolean types
+      (doseq [[k v] [[":sync/instructions" instructions]]]
+        (when-not (boolean? v)
+          (throw (ex-info (str k " must be a boolean")
+                          {:babashka/exit 1
+                           :config config}))))
       ;; Warn if all empty
-      (when (and (empty? joyride-files) (empty? npm-deps) (empty? skills))
+      (when (and (empty? joyride-files) (empty? npm-deps) (empty? skills)
+                 (empty? agents) (empty? prompts) (not instructions))
         (println (yellow "⚠ Warning: all sync entries are empty")))
-      ;; Return normalized config with defaults
       {:sync/joyride-files (or joyride-files [])
        :sync/npm-deps (or npm-deps [])
-       :sync/skills (or skills [])})))
+       :sync/skills (or skills [])
+       :sync/agents (or agents [])
+       :sync/prompts (or prompts [])
+       :sync/instructions instructions})))
 
 ;; File Expansion
 
@@ -126,6 +135,20 @@
                               relative-matches (map #(str (fs/relativize source-root %)) matches)
                               filtered (remove #(str/includes? % "node_modules") relative-matches)]
                           {:files filtered})))))
+        errors (keep :error results)
+        files (mapcat :files results)]
+    {:files (vec files)
+     :errors (vec errors)}))
+
+;; Named File Expansion (agents, prompts)
+
+(defn- expand-named-entries [source-root entries suffix]
+  (let [results (for [entry entries]
+                  (let [filename (str entry suffix)
+                        full-path (fs/path source-root filename)]
+                    (if (fs/exists? full-path)
+                      {:files [filename]}
+                      {:error {:entry entry :type :missing-file}})))
         errors (keep :error results)
         files (mapcat :files results)]
     {:files (vec files)
@@ -209,97 +232,152 @@
 (defn- format-dir-display [dir]
   (str/replace (str dir) (str (fs/home)) "~"))
 
-(defn- print-report! [direction result]
-  (let [{:keys [joyride skills outcome]} result]
-    (case outcome
-      :aborted
-      (do
-        (println (red "✗ Aborted: source entries not found"))
-        (println)
-        (when (seq (get-in joyride [:files :errors]))
-          (println (str "  Joyride -- missing from " (format-dir-display (:source joyride)) ":"))
-          (doseq [{:keys [entry]} (get-in joyride [:files :errors])]
+(defn- print-report! [direction {:keys [concerns npm-deps outcome]}]
+  (case outcome
+    :aborted
+    (do
+      (println (red "✗ Aborted: source entries not found"))
+      (println)
+      (doseq [{:concern/keys [name source expansion]} concerns]
+        (when (seq (:errors expansion))
+          (println (str "  " name " -- missing from " (format-dir-display source) ":"))
+          (doseq [{:keys [entry]} (:errors expansion)]
             (println "   " entry))
-          (println))
-        (when (seq (get-in skills [:files :errors]))
-          (println (str "  Skills -- missing from " (format-dir-display (:source skills)) ":"))
-          (doseq [{:keys [entry]} (get-in skills [:files :errors])]
-            (println "   " entry))
-          (println))
-        (println "  Check dependencies-sync.edn entries"))
+          (println)))
+      (println "  Check dependencies-sync.edn entries"))
 
-      :blocked
-      (let [joyride-conflicts (get-in joyride [:files :conflicts])
-            skills-conflicts (get-in skills [:files :conflicts])
-            total-conflicts (+ (count joyride-conflicts) (count skills-conflicts))]
-        (println (red (str "✗ Blocked: " total-conflicts " file" (when (> total-conflicts 1) "s") " differ")))
-        (println)
-        (when (seq joyride-conflicts)
-          (println "  Joyride conflicts:")
-          (doseq [{:keys [file diff]} joyride-conflicts]
+    :blocked
+    (let [all-conflicts (mapcat #(get-in % [:concern/diffs :conflicts]) concerns)
+          total (count all-conflicts)]
+      (println (red (str "✗ Blocked: " total " file" (when (> total 1) "s") " differ")))
+      (println)
+      (doseq [{:concern/keys [name diffs]} concerns]
+        (when (seq (:conflicts diffs))
+          (println (str "  " name " conflicts:"))
+          (doseq [{:keys [file diff]} (:conflicts diffs)]
             (println "   " file)
             (doseq [line (str/split-lines diff)]
               (println "     " line)))
-          (println))
-        (when (seq skills-conflicts)
-          (println "  Skills conflicts:")
-          (doseq [{:keys [file diff]} skills-conflicts]
-            (println "   " file)
-            (doseq [line (str/split-lines diff)]
-              (println "     " line)))
-          (println))
-        (let [joyride-to-copy (get-in joyride [:files :to-copy])
-              skills-to-copy (get-in skills [:files :to-copy])]
-          (when (or (seq joyride-to-copy) (seq skills-to-copy))
-            (println "  Would have copied:")
-            (when (seq joyride-to-copy)
-              (doseq [file joyride-to-copy]
-                (println "    Joyride:" file)))
-            (when (seq skills-to-copy)
-              (doseq [file skills-to-copy]
-                (println "    Skills:" file)))
-            (println)))
-        (println "  Resolve conflicts first, then re-run:"
-                 (if (= direction :localize) "bb localize" "bb globalize")))
+          (println)))
+      (let [all-to-copy (for [{:concern/keys [name diffs]} concerns
+                              file (:to-copy diffs)]
+                          {:name name :file file})]
+        (when (seq all-to-copy)
+          (println "  Would have copied:")
+          (doseq [{:keys [name file]} all-to-copy]
+            (println (str "    " name ": " file)))
+          (println)))
+      (println "  Resolve conflicts first, then re-run:"
+               (if (= direction :localize) "bb localize" "bb globalize")))
 
-      :in-sync
-      (do
-        (println (yellow "ℹ Already in sync -- nothing to do"))
-        (println)
-        (let [joyride-files-count (count (get-in joyride [:files :identical]))
-              joyride-npm-count (count (get-in joyride [:npm-deps :identical]))
-              skills-files-count (count (get-in skills [:files :identical]))]
-          (when (or (pos? joyride-files-count) (pos? joyride-npm-count))
-            (println (str "  Joyride: "
-                          joyride-files-count " files match"
-                          (when (pos? joyride-npm-count)
-                            (str ", " joyride-npm-count " npm deps present")))))
-          (when (pos? skills-files-count)
-            (println "  Skills:" (str skills-files-count " files match")))))
+    :in-sync
+    (do
+      (println (yellow "ℹ Already in sync -- nothing to do"))
+      (println)
+      (doseq [{:concern/keys [name diffs]} concerns]
+        (let [file-count (count (:identical diffs))]
+          (when (pos? file-count)
+            (println (str "  " name ": " file-count " file"
+                          (when (> file-count 1) "s") " match")))))
+      (when npm-deps
+        (let [npm-count (count (:identical npm-deps))]
+          (when (pos? npm-count)
+            (println (str "  npm: " npm-count " dep"
+                          (when (> npm-count 1) "s") " present"))))))
 
-      :success
-      (let [joyride-copied (get-in joyride [:files :copied])
-            skills-copied (get-in skills [:files :copied])
-            npm-installed (get-in joyride [:npm-deps :installed])
-            action (if (= direction :localize) "Localized" "Globalized")
-            parts (cond-> []
-                    (seq joyride-copied) (conj (str (count joyride-copied) " joyride file" (when (> (count joyride-copied) 1) "s")))
-                    (seq skills-copied) (conj (str (count skills-copied) " skill file" (when (> (count skills-copied) 1) "s")))
-                    (seq npm-installed) (conj (str "installed " (count npm-installed) " npm dep" (when (> (count npm-installed) 1) "s"))))]
-        (println (green (str "✓ " action " " (str/join ", " parts))))
-        (println)
-        (when (seq joyride-copied)
-          (println "  Joyride copied:")
-          (doseq [file joyride-copied]
+    :success
+    (let [action (if (= direction :localize) "Localized" "Globalized")
+          copied-parts (keep (fn [{:concern/keys [name diffs]}]
+                               (let [copied (:copied diffs)]
+                                 (when (seq copied)
+                                   (str (count copied) " " (str/lower-case name) " file"
+                                        (when (> (count copied) 1) "s")))))
+                             concerns)
+          npm-installed (:installed npm-deps)
+          parts (cond-> (vec copied-parts)
+                  (seq npm-installed)
+                  (conj (str "installed " (count npm-installed) " npm dep"
+                             (when (> (count npm-installed) 1) "s"))))]
+      (println (green (str "✓ " action " " (str/join ", " parts))))
+      (println)
+      (doseq [{:concern/keys [name diffs]} concerns]
+        (when (seq (:copied diffs))
+          (println (str "  " name " copied:"))
+          (doseq [file (:copied diffs)]
             (println "   " file))
-          (println))
-        (when (seq skills-copied)
-          (println "  Skills copied:")
-          (doseq [file skills-copied]
-            (println "   " file))
-          (println))
-        (when (seq npm-installed)
-          (println "  npm:" (str/join ", " npm-installed) "->" (:target joyride)))))))
+          (println)))
+      (when (seq npm-installed)
+        (let [joyride-target (:concern/target
+                              (first (filter #(= "Joyride" (:concern/name %)) concerns)))]
+          (println "  npm:" (str/join ", " npm-installed) "->" joyride-target))))))
+
+;; Concern Building
+
+(defn- build-concerns [direction config global-joyride-dir global-copilot-dir]
+  (let [copilot-skills-dir (str (fs/path global-copilot-dir "skills"))
+        copilot-agents-dir (str (fs/path global-copilot-dir "agents"))
+        copilot-prompts-dir (str (fs/path global-copilot-dir "prompts"))
+        dir-pair (fn [global local]
+                   (if (= direction :localize) [global local] [local global]))]
+    (cond-> []
+      (or (seq (:sync/joyride-files config)) (seq (:sync/npm-deps config)))
+      (conj (let [[s t] (dir-pair global-joyride-dir ".joyride/")]
+              {:concern/name "Joyride"
+               :concern/source s
+               :concern/target t
+               :concern/expand-fn expand-file-entries
+               :concern/config-entries (:sync/joyride-files config)
+               :concern/npm-deps (:sync/npm-deps config)}))
+
+      (seq (:sync/skills config))
+      (conj (let [[s t] (dir-pair copilot-skills-dir ".github/skills/")]
+              {:concern/name "Skills"
+               :concern/source s
+               :concern/target t
+               :concern/expand-fn expand-skill-entries
+               :concern/config-entries (:sync/skills config)}))
+
+      (seq (:sync/agents config))
+      (conj (let [[s t] (dir-pair copilot-agents-dir ".github/agents/")]
+              {:concern/name "Agents"
+               :concern/source s
+               :concern/target t
+               :concern/expand-fn (fn [source entries]
+                                    (expand-named-entries source entries ".agent.md"))
+               :concern/config-entries (:sync/agents config)}))
+
+      (seq (:sync/prompts config))
+      (conj (let [[s t] (dir-pair copilot-prompts-dir ".github/prompts/")]
+              {:concern/name "Prompts"
+               :concern/source s
+               :concern/target t
+               :concern/expand-fn (fn [source entries]
+                                    (expand-named-entries source entries ".prompt.md"))
+               :concern/config-entries (:sync/prompts config)}))
+
+      (:sync/instructions config)
+      (conj (let [[s t] (dir-pair global-copilot-dir ".github/")]
+              {:concern/name "Instructions"
+               :concern/source s
+               :concern/target t
+               :concern/expand-fn expand-file-entries
+               :concern/config-entries ["instructions.md"]})))))
+
+(defn- expand-concern [{:concern/keys [expand-fn source config-entries] :as concern}]
+  (let [expansion (if (seq config-entries)
+                    (expand-fn source config-entries)
+                    {:files [] :errors []})]
+    (assoc concern :concern/expansion expansion)))
+
+(defn- diff-concern [{:concern/keys [source target expansion] :as concern}]
+  (assoc concern :concern/diffs
+         (check-file-diffs source target (:files expansion))))
+
+(defn- copy-concern! [{:concern/keys [source target diffs] :as concern}]
+  (if (seq (:to-copy diffs))
+    (let [copied (copy-files! source target (:to-copy diffs))]
+      (assoc-in concern [:concern/diffs :copied] copied))
+    concern))
 
 ;; Orchestration
 
@@ -313,104 +391,61 @@
                        :direction direction})))
 
     (try
-      ;; Resolve both global directories
       (let [global-joyride-dir (resolve-global-joyride-dir)
-            global-skills-dir (resolve-global-copilot-skills-dir)
-
-            ;; Set source/target for each concern
-            [joyride-source joyride-target] (if (= direction :localize)
-                                              [global-joyride-dir ".joyride/"]
-                                              [".joyride/" global-joyride-dir])
-            [skills-source skills-target] (if (= direction :localize)
-                                            [global-skills-dir ".github/skills/"]
-                                            [".github/skills/" global-skills-dir])
-
-            ;; Load config
+            global-copilot-dir (resolve-global-copilot-dir)
             config (load-config)
+            concerns (build-concerns direction config global-joyride-dir global-copilot-dir)
 
-            ;; Expand both concerns
-            joyride-expansion (expand-file-entries joyride-source (:sync/joyride-files config))
-            skills-expansion (expand-skill-entries skills-source (:sync/skills config))]
+            ;; Phase 1: Expand all concerns
+            concerns (mapv expand-concern concerns)]
 
-        ;; Check for expansion errors in EITHER concern
-        (when (or (seq (:errors joyride-expansion))
-                  (seq (:errors skills-expansion)))
-          (let [result {:direction direction
-                        :joyride {:source joyride-source
-                                  :target joyride-target
-                                  :files joyride-expansion
-                                  :npm-deps {}}
-                        :skills {:source skills-source
-                                 :target skills-target
-                                 :files skills-expansion}
-                        :outcome :aborted}]
+        ;; Phase 2: Check expansion errors
+        (when (some #(seq (get-in % [:concern/expansion :errors])) concerns)
+          (let [result {:direction direction :concerns concerns :outcome :aborted}]
             (write-output! "dependencies-sync-result.edn" (pr-str result))
             (print-report! direction result)
             (System/exit 1)))
 
-        ;; Diff-check both concerns
-        (let [joyride-file-diffs (check-file-diffs joyride-source joyride-target (:files joyride-expansion))
-              skills-file-diffs (check-file-diffs skills-source skills-target (:files skills-expansion))
-              npm-check (check-npm-deps joyride-target (:sync/npm-deps config))]
+        ;; Phase 3: Diff all concerns
+        (let [concerns (mapv diff-concern concerns)
+              ;; npm deps (joyride-only sub-concern)
+              joyride (first (filter #(= "Joyride" (:concern/name %)) concerns))
+              npm-check (when (:concern/npm-deps joyride)
+                          (check-npm-deps (:concern/target joyride)
+                                          (:concern/npm-deps joyride)))]
 
-          ;; Check for conflicts in EITHER concern
-          (when (or (seq (:conflicts joyride-file-diffs))
-                    (seq (:conflicts skills-file-diffs)))
-            (let [result {:direction direction
-                          :joyride {:source joyride-source
-                                    :target joyride-target
-                                    :files joyride-file-diffs
-                                    :npm-deps npm-check}
-                          :skills {:source skills-source
-                                   :target skills-target
-                                   :files skills-file-diffs}
-                          :outcome :blocked}]
+          ;; Phase 4: Check conflicts
+          (when (some #(seq (get-in % [:concern/diffs :conflicts])) concerns)
+            (let [result {:direction direction :concerns concerns
+                          :npm-deps npm-check :outcome :blocked}]
               (write-output! "dependencies-sync-result.edn" (pr-str result))
               (print-report! direction result)
               (System/exit 1)))
 
-          ;; Check if in-sync (nothing to do)
-          (when (and (empty? (:to-copy joyride-file-diffs))
-                     (empty? (:to-copy skills-file-diffs))
-                     (empty? (:to-add npm-check)))
-            (let [result {:direction direction
-                          :joyride {:source joyride-source
-                                    :target joyride-target
-                                    :files joyride-file-diffs
-                                    :npm-deps npm-check}
-                          :skills {:source skills-source
-                                   :target skills-target
-                                   :files skills-file-diffs}
-                          :outcome :in-sync}]
+          ;; Phase 5: Check in-sync
+          (when (and (not-any? #(seq (get-in % [:concern/diffs :to-copy])) concerns)
+                     (or (nil? npm-check) (empty? (:to-add npm-check))))
+            (let [result {:direction direction :concerns concerns
+                          :npm-deps npm-check :outcome :in-sync}]
               (write-output! "dependencies-sync-result.edn" (pr-str result))
               (print-report! direction result)
               (System/exit 0)))
 
-          ;; Create target directories if needed (for localize)
+          ;; Phase 6: Create target directories and execute
           (when (= direction :localize)
-            (when (and (seq (:to-copy joyride-file-diffs))
-                       (not (fs/exists? joyride-target)))
-              (fs/create-dirs joyride-target))
-            (when (and (seq (:to-copy skills-file-diffs))
-                       (not (fs/exists? skills-target)))
-              (fs/create-dirs skills-target)))
+            (doseq [{:concern/keys [target diffs]} concerns]
+              (when (and (seq (:to-copy diffs)) (not (fs/exists? target)))
+                (fs/create-dirs target))))
 
-          ;; Execute: copy joyride files + install npm deps + copy skill files
-          (let [joyride-copied (when (seq (:to-copy joyride-file-diffs))
-                                 (copy-files! joyride-source joyride-target (:to-copy joyride-file-diffs)))
+          (let [concerns (mapv copy-concern! concerns)
                 npm-installed (when (seq (:to-add npm-check))
-                                (install-npm-deps! joyride-target (:to-add npm-check)))
-                skills-copied (when (seq (:to-copy skills-file-diffs))
-                                (copy-files! skills-source skills-target (:to-copy skills-file-diffs)))
-                result {:direction direction
-                        :joyride {:source joyride-source
-                                  :target joyride-target
-                                  :files (assoc joyride-file-diffs :copied joyride-copied)
-                                  :npm-deps (assoc npm-check :installed npm-installed)}
-                        :skills {:source skills-source
-                                 :target skills-target
-                                 :files (assoc skills-file-diffs :copied skills-copied)}
-                        :outcome :success}]
+                                (install-npm-deps! (:concern/target joyride)
+                                                   (:to-add npm-check)))
+                npm-check (if npm-installed
+                            (assoc npm-check :installed npm-installed)
+                            npm-check)
+                result {:direction direction :concerns concerns
+                        :npm-deps npm-check :outcome :success}]
             (write-output! "dependencies-sync-result.edn" (pr-str result))
             (print-report! direction result))))
 

@@ -4,12 +4,12 @@
  {:requires ([babashka.cli :as cli]
              [dependencies-sync])
 
-  localize  {:doc  "Sync Joyride files and Copilot skills from global to workspace. Results written to .tmp/dependencies-sync-result.edn"
+  localize  {:doc  "Sync Joyride files and Copilot files from global to workspace. Results written to .tmp/dependencies-sync-result.edn"
              :task (dependencies-sync/sync!
                     (assoc (cli/parse-opts *command-line-args*)
                            :direction :localize))}
 
-  globalize {:doc  "Sync Joyride files and Copilot skills from workspace to global. Results written to .tmp/dependencies-sync-result.edn"
+  globalize {:doc  "Sync Joyride files and Copilot files from workspace to global. Results written to .tmp/dependencies-sync-result.edn"
              :task (dependencies-sync/sync!
                     (assoc (cli/parse-opts *command-line-args*)
                            :direction :globalize))}}}

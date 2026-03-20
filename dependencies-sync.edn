@@ -9,4 +9,11 @@
                "joyride"
                "joyride-user-scripts"
                "joyride-workspace-automation"
-               "next-slide-editor"]}
+               "next-slide-editor"]
+ :sync/agents ["clojure-architect"
+               "clojure-editor"
+               "clojure-interactive-programming"
+               "clojure-reviewer"]
+ :sync/prompts ["Implement"
+                "principles"]
+ :sync/instructions true}
