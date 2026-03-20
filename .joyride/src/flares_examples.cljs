@@ -1,4 +1,4 @@
-(ns flares
+(ns flares-examples
   "Demonstrates Joyride Flares for creating WebView panels and sidebar views"
   (:require
    ["vscode" :as vscode]
