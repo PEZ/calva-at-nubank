@@ -91,7 +91,7 @@ Use the search + navigate helpers to research answers on calva.io:
 
 Keep two lenses in mind — a given task usually emphasises one, but never ignore the other:
 
-1. **KNOW / FEEL / DO** — What should each audience segment *know*, *feel*, and *do* after this slide? (See the framework in README.md)
+1. **KNOW / FEEL / DO** — What should each audience segment *know*, *feel*, and *do* after this slide? Calibrate with PEZ about applying the framework.
 2. **Technical accuracy** — Correct terminology, proper Clojure ecosystem relationships, working code examples
 
 ## Writing style
