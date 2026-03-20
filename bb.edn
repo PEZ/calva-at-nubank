@@ -1,0 +1,15 @@
+{:paths ["scripts"]
+ :deps  {org.babashka/cli {:mvn/version "0.2.23"}}
+ :tasks
+ {:requires ([babashka.cli :as cli]
+             [joyride-eject])
+
+  localize  {:doc  "Copy Joyride files from global to workspace .joyride/. Results also written to .tmp/joyride-eject-result.edn"
+             :task (joyride-eject/sync!
+                    (assoc (cli/parse-opts *command-line-args*)
+                           :direction :localize))}
+
+  globalize {:doc  "Copy Joyride files from workspace .joyride/ to global. Results also written to .tmp/joyride-eject-result.edn"
+             :task (joyride-eject/sync!
+                    (assoc (cli/parse-opts *command-line-args*)
+                           :direction :globalize))}}}

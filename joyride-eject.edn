@@ -1,0 +1,6 @@
+{:files ["src/showtime.cljs"
+         "src/flares.cljs"
+         "src/prezo/**"
+         "scripts/keybinding_palette.cljs"]
+ :npm-deps ["posthtml-parser"
+            "jsonc-parser"]}

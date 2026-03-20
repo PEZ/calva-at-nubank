@@ -1,0 +1,107 @@
+{
+  "markdown.preview.fontSize": 22,
+  "markdown.styles": [
+    "next-slide.css"
+  ],
+  "window.zoomLevel": 2,
+  "editor.fontSize": 24,
+  "markdown.preview.lineHeight": 1.5,
+  "calva.customREPLHoverSnippets": [
+    {
+      "name": "Eval text on hover",
+      "snippet": "(str :Hello_Nubank! \" $hover-text\")"
+    }
+  ],
+  "calva.replConnectSequences": [
+    {
+      "name": "Shadow fullstack",
+      "projectType": "deps.edn",
+      "cljsType": "shadow-cljs",
+      "replSessionNames": {
+        "primary": "backend",
+        "secondary": "frontend"
+      },
+      "afterPrimaryReplConnectedCode": [
+        "(println :renamed-primary-to-backend)",
+        "(println :renamed-secondary-to-frontend)"
+      ],
+      "menuSelections": {
+        "cljAliases": [
+          "dev",
+        ],
+        "cljsLaunchBuilds": [
+          "app",
+        ],
+        "cljsDefaultBuild": "app"
+      }
+    },
+    {
+      "name": "Epupp REPL",
+      "projectType": "scittle",
+      "fallbackPort": 3339,
+      "replSessionNames": {
+        "primary": "epupp"
+      },
+      "replSessionFilePatterns": {
+        "primary": [
+          "epupp-userscripts/**/*.cljs",
+          "live-tampers/*.cljs",
+        ]
+      }
+    },
+    {
+      "name": "Scittle Tic-Tac-Toe REPL",
+      "projectType": "scittle",
+      "fallbackPort": 1339,
+      "replSessionNames": {
+        "primary": "tic-tac-toe"
+      },
+      "replSessionFilePatterns": {
+        "primary": [
+          ".joyride/src/scittle-replicant-tic-tac-toe/resources/scittle/**/core.cljs",
+        ]
+      }
+    },
+    {
+      "name": "pirate-lang",
+      "projectType": "deps.edn",
+      "projectRootPath": [
+        "projects",
+        "pirate-lang"
+      ],
+      "cljsType": "none",
+      "replSessionNames": {
+        // "primary": "pirate-lang"
+      },
+      "menuSelections": {
+        "cljAliases": [
+          "allow-attach-self",
+          "dev",
+          "test"
+        ]
+      }
+    },
+    {
+      "name": "Docker REPL (pirate-lang)",
+      "projectType": "deps.edn",
+      "projectRootPath": [
+        "projects",
+        "pirate-lang"
+      ],
+      "customJackInCommandLine": "bb docker-repl",
+      "cljsType": "none",
+      "replSessionNames": {
+        // "primary": "pirate-lang"
+      },
+      "menuSelections": {
+        "cljAliases": [
+          "allow-attach-self",
+          "dev",
+          "test"
+        ]
+      }
+    },
+  ],
+  "zenMode.hideStatusBar": false,
+  "zenMode.hideLineNumbers": true
+}

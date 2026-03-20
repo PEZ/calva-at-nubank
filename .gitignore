@@ -1,0 +1,9 @@
+.nrepl-port
+.shadow-cljs
+compiled
+target
+dist
+build
+out
+node_modules
+.tmp/

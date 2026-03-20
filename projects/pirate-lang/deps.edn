@@ -1,0 +1,16 @@
+{:paths ["resources" "src"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.4"}}
+ :aliases
+ {:socket {:jvm-opts ["-Dclojure.server.repl={:port 5555 :accept clojure.core.server/repl}"]}
+  :test {:extra-paths ["test"]
+         :extra-deps {org.clojure/test.check {:mvn/version "0.10.0"}}}
+  :dev {:extra-paths ["env/dev"]
+         :extra-deps {metosin/malli {:mvn/version "0.20.1"}
+                      com.hyperfiddle/rcf {:mvn/version "20220926-202227"}}}
+  :allow-attach-self {:jvm-opts ["-Djdk.attach.allowAttachSelf"]}
+  :runner
+  {:extra-deps {com.cognitect/test-runner
+                {:git/url "https://github.com/cognitect-labs/test-runner"
+                 :sha "76568540e7f40268ad2b646110f237a60295fa3c"}}
+   :main-opts ["-m" "cognitect.test-runner"
+               "-d" "test"]}}}

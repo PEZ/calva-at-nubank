@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Scittle REPL",
+      "type": "shell",
+      "command": "bb -Sdeps '{:deps {io.github.babashka/sci.nrepl {:git/sha \"80ec956af5e6610b040089ba62eecb5d223e9e76\"}}}' -e '(require (quote [sci.nrepl.browser-server :as server])) (server/start! {:nrepl-port 1339 :websocket-port 1340}) @(promise)'",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "group": "REPLs"
+      }
+    },
+    {
+      "label": "Epupp REPL",
+      "type": "shell",
+      "command": "bb -Sdeps '{:deps {io.github.babashka/sci.nrepl {:git/sha \"80ec956af5e6610b040089ba62eecb5d223e9e76\"}}}' -e '(require (quote [sci.nrepl.browser-server :as server])) (server/start! {:nrepl-port 3339 :websocket-port 3340}) @(promise)'",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "group": "REPLs"
+      }
+    },
+    {
+      "label": "Start Dev Environment",
+      "dependsOn": [
+        "Scittle REPL",
+        "Epupp REPL",
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}

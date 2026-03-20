@@ -1,0 +1,7 @@
+{:source-paths ["." "live-tampers"]
+ :deps {projects/pirate-lang {:local/root "projects/pirate-lang"}
+        projects/shadow {:local/root "projects/shadow-w-backend"}
+        projects/ttt {:local/root ".joyride/src/scittle-replicant-tic-tac-toe/resources/scittle"}}
+ :aliases {:joyride
+           {:extra-deps
+            {joyride/workspace {:local/root ".joyride"}}}}}
