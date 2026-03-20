@@ -111,14 +111,21 @@
 ;; Skills Expansion
 
 (defn- expand-skill-entries [source-root skill-names]
-  (let [results (for [skill-name skill-names]
-                  (let [skill-dir (fs/path source-root skill-name)]
-                    (if-not (fs/exists? skill-dir)
-                      {:error {:entry skill-name :type :missing-skill}}
-                      (let [matches (fs/glob source-root (str skill-name "/**"))
-                            relative-matches (map #(str (fs/relativize source-root %)) matches)
-                            filtered (remove #(str/includes? % "node_modules") relative-matches)]
-                        {:files filtered}))))
+  (let [results (for [entry skill-names]
+                  (if (glob-pattern? entry)
+                    (let [matches (fs/glob source-root entry)
+                          relative-matches (map #(str (fs/relativize source-root %)) matches)
+                          filtered (remove #(str/includes? % "node_modules") relative-matches)]
+                      (if (empty? filtered)
+                        {:error {:entry entry :type :no-match}}
+                        {:files filtered}))
+                    (let [skill-dir (fs/path source-root entry)]
+                      (if-not (fs/exists? skill-dir)
+                        {:error {:entry entry :type :missing-skill}}
+                        (let [matches (fs/glob source-root (str entry "/**"))
+                              relative-matches (map #(str (fs/relativize source-root %)) matches)
+                              filtered (remove #(str/includes? % "node_modules") relative-matches)]
+                          {:files filtered})))))
         errors (keep :error results)
         files (mapcat :files results)]
     {:files (vec files)
@@ -222,39 +229,38 @@
         (println "  Check dependencies-sync.edn entries"))
 
       :blocked
-      (do
-        (let [joyride-conflicts (get-in joyride [:files :conflicts])
-              skills-conflicts (get-in skills [:files :conflicts])
-              total-conflicts (+ (count joyride-conflicts) (count skills-conflicts))]
-          (println (red (str "✗ Blocked: " total-conflicts " file" (when (> total-conflicts 1) "s") " differ")))
-          (println)
-          (when (seq joyride-conflicts)
-            (println "  Joyride conflicts:")
-            (doseq [{:keys [file diff]} joyride-conflicts]
-              (println "   " file)
-              (doseq [line (str/split-lines diff)]
-                (println "     " line)))
-            (println))
-          (when (seq skills-conflicts)
-            (println "  Skills conflicts:")
-            (doseq [{:keys [file diff]} skills-conflicts]
-              (println "   " file)
-              (doseq [line (str/split-lines diff)]
-                (println "     " line)))
-            (println))
-          (let [joyride-to-copy (get-in joyride [:files :to-copy])
-                skills-to-copy (get-in skills [:files :to-copy])]
-            (when (or (seq joyride-to-copy) (seq skills-to-copy))
-              (println "  Would have copied:")
-              (when (seq joyride-to-copy)
-                (doseq [file joyride-to-copy]
-                  (println "    Joyride:" file)))
-              (when (seq skills-to-copy)
-                (doseq [file skills-to-copy]
-                  (println "    Skills:" file)))
-              (println)))
-          (println "  Resolve conflicts first, then re-run:"
-                   (if (= direction :localize) "bb localize" "bb globalize"))))
+      (let [joyride-conflicts (get-in joyride [:files :conflicts])
+            skills-conflicts (get-in skills [:files :conflicts])
+            total-conflicts (+ (count joyride-conflicts) (count skills-conflicts))]
+        (println (red (str "✗ Blocked: " total-conflicts " file" (when (> total-conflicts 1) "s") " differ")))
+        (println)
+        (when (seq joyride-conflicts)
+          (println "  Joyride conflicts:")
+          (doseq [{:keys [file diff]} joyride-conflicts]
+            (println "   " file)
+            (doseq [line (str/split-lines diff)]
+              (println "     " line)))
+          (println))
+        (when (seq skills-conflicts)
+          (println "  Skills conflicts:")
+          (doseq [{:keys [file diff]} skills-conflicts]
+            (println "   " file)
+            (doseq [line (str/split-lines diff)]
+              (println "     " line)))
+          (println))
+        (let [joyride-to-copy (get-in joyride [:files :to-copy])
+              skills-to-copy (get-in skills [:files :to-copy])]
+          (when (or (seq joyride-to-copy) (seq skills-to-copy))
+            (println "  Would have copied:")
+            (when (seq joyride-to-copy)
+              (doseq [file joyride-to-copy]
+                (println "    Joyride:" file)))
+            (when (seq skills-to-copy)
+              (doseq [file skills-to-copy]
+                (println "    Skills:" file)))
+            (println)))
+        (println "  Resolve conflicts first, then re-run:"
+                 (if (= direction :localize) "bb localize" "bb globalize")))
 
       :in-sync
       (do
@@ -316,8 +322,8 @@
                                               [global-joyride-dir ".joyride/"]
                                               [".joyride/" global-joyride-dir])
             [skills-source skills-target] (if (= direction :localize)
-                                            [global-skills-dir ".copilot/skills/"]
-                                            [".copilot/skills/" global-skills-dir])
+                                            [global-skills-dir ".github/skills/"]
+                                            [".github/skills/" global-skills-dir])
 
             ;; Load config
             config (load-config)
