@@ -103,5 +103,8 @@
     },
   ],
   "zenMode.hideStatusBar": false,
-  "zenMode.hideLineNumbers": true
+  "zenMode.hideLineNumbers": true,
+  "chat.promptFilesLocations": {
+    "~/.copilot/prompts": true
+  }
 }
