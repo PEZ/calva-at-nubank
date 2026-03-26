@@ -71,7 +71,7 @@
       ],
       "cljsType": "none",
       "replSessionNames": {
-        // "primary": "pirate-lang"
+        "primary": "pirate-lang"
       },
       "menuSelections": {
         "cljAliases": [
@@ -91,7 +91,7 @@
       "customJackInCommandLine": "bb docker-repl",
       "cljsType": "none",
       "replSessionNames": {
-        // "primary": "pirate-lang"
+        "primary": "pirate-lang-docker"
       },
       "menuSelections": {
         "cljAliases": [
