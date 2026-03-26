@@ -1,6 +1,3 @@
-# REPL Workflow & Automation (Calva, Joyride, Copilot)
-
-
 
 ### Resources
 - [CalvaTV](https://www.youtube.com/@CalvaTV)
