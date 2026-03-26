@@ -1,36 +1,41 @@
 # REPL Workflow Automation with Calva and Joyride
 
-A companion repository for a presentation I made for Nubank devs on interactive development with Calva, and Joyride. This is the slide deck. It is also a working project for running the slides. There are also has embedded demo projects, preconfigure Calva Connect Sequences, and some automation patterns I am fond of. Plus:
+Slides for a presentation I made for Nubank devs on interactive development with Calva, and Joyride. It is also a working project for running the slides. Plus more.
+
+## Run the Presentation
+
+1. Clone this repo
+2. Install [Calva](https://calva.io) and [Joyride](https://github.com/BetterThanTomorrow/joyride) in VS Code
+3. Run `npm install` in the `.joyride/` directory
+4. Copy the [keybindings](#keybindings) to your `keybindings.json`
+5. Open this workspace in VS Code
+6. <kbd>F5</kbd> twice: Will switch to zen and presentation mode showing the first slide.
+7. Navigate with arrow keys (left/right)
+
+The slide order is defined in [slides.edn](slides.edn). The styling lives in [next-slide.css](next-slide.css). The navigation logic is in [.joyride/src/prezo/next_slide.cljs](.joyride/src/prezo/next_slide.cljs). There's a dedicated [next-slide-editor skill](.github/skills/next-slide-editor/SKILL.md) for adding and updating slides.
+
+Switch between show and edit mode for a slide by pressing <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>J</kbd> <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>M</kbd>.
+
+## What's Here
 
 - **A custom slide deck**: markdown rendered in VS Code with Joyride-powered navigation
 - **3 runnable projects**: a Clojure language playground, a toy full-stack ClojureScript app, and an interactive Scittle game
 - **5 REPL connections**: different Clojure/ClojureScript runtimes working simultaneously
+- **Custom REPL commands**: bundled in the workspace settings for testing, Epupp userscript upload, dependency management, and more
 - **Joyride automation**: the presentation system itself, WebView panels (Flares), browser tampering, a keybinding palette, and more
-- **Automation recipes**: global Babashka tasks (bbg) and a workspace/global sync system. That I created to pack some of my global scripts into the project. You can use it to get the scripts out of the project. 😀
-- **Copilot customization**: agents, skills, and custom instructions applied to real workflows
+- **Copilot customization**: agents, skills, and custom instructions relevant for the content of this project
+- **Automation recipes**: global Babashka tasks (bbg). Local bb `localize`/`globalize` sync tasks that I created to pack some of my global scripts into the project. You can use `globalize` to get the scripts and config from the project to your user config.
 
 ## Prerequisites
 
 Depending on what you want to play with.
 
 - **Java**: the only hard requirement for the Clojure projects
-- **VS Code** with [Calva](https://calva.io): for REPL support, formatting, and the slide system
-- **Node.js**: for Joyride scripting and the automation recipes. After cloning, run `npm install` in the `.joyride/` directory to install the npm packages that some Joyride scripts depend on (the keybinding palette and some live examples).
-- **Babashka** (`bb`): for workspace tasks (`bb localize`, `bb globalize`)
+- **VS Code** with [Calva](https://calva.io) and [Joyride](https://github.com/BetterThanTomorrow/joyride)
+- **Node.js**: for Joyride scripting and the automation recipes
 - **Docker**: for the containerized pirate-lang REPL
-- [Joyride](https://github.com/BetterThanTomorrow/joyride) extension: for VS Code scripting (the presentation system, Flares, automation)
+- **Babashka** (`bb`): for workspace tasks (`bb localize`, `bb globalize`)
 - [Backseat Driver](https://github.com/BetterThanTomorrow/backseat-driver) extension: for Copilot + Calva REPL integration
-
-## Running the Presentation
-
-The slides are markdown files styled with custom CSS, rendered in VS Code's markdown preview. Joyride provides keyboard navigation.
-
-1. Open this workspace in VS Code
-2. Run the **Start Dev Environment** build task (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>): this launches the Scittle and Epupp background REPLs that power some demos
-3. Open [slides/hello.md](slides/hello.md) and toggle markdown preview (<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>)
-4. Navigate with arrow keys (left/right) when the slide navigator is active
-
-The slide order is defined in [slides.edn](slides.edn). The styling lives in [next-slide.css](next-slide.css). The navigation logic is in [.joyride/src/prezo/next_slide.cljs](.joyride/src/prezo/next_slide.cljs). There's a dedicated [next-slide-editor skill](.github/skills/next-slide-editor/SKILL.md) for adding and updating slides.
 
 ## The Five REPL Connections
 
@@ -58,27 +63,46 @@ All sequences are defined in [.vscode/settings.json](.vscode/settings.json) unde
 
 A super silly one-file Clojure project, with a Docker option for isolated development.
 
-**Start it:** Calva Jack-in -> **pirate-lang**. For the containerized version: Calva Jack-in -> **Docker REPL (pirate-lang)** (requires Docker).
+**Start it:**
+* Open [pirate_lang.clj](projects/pirate-lang/src/pez/pirate_lang.clj)
+* From the Command Palette: **Start your project with a REPL and connect (a.k.a. Jack-in)**
+* Select **pirate-lang**
+
+The repl-session `pirate-lang` should show as active in the status bar.
 
 **What to try:**
-- Open [projects/pirate-lang/src/pez/pirate_lang.clj](projects/pirate-lang/src/pez/pirate_lang.clj) and evaluate forms
-- Run tests from the REPL
-- Explore the fiddles in [projects/pirate-lang/dev/fiddles/](projects/pirate-lang/dev/fiddles/)
+- Evaluate some forms
+
+There's not much more to it. 😀
+
+### pirate-lang: Dockerized
+
+Same project, isolated in a container. Exposes nREPL on port 7888. Source, test, and resource directories are mounted as volumes so edits are live.
+
+The connect sequence uses a [custom Jack-in command line](https://calva.io/connect-sequences/#custom-command-line) (`bb docker-repl`) that builds and runs the container automatically. Requires Docker.
+
+**Start it:**
+* Open [pirate_lang.clj](projects/pirate-lang/src/pez/pirate_lang.clj)
+* From the Command Palette: **Start your project with a REPL and connect (a.k.a. Jack-in)**
+* Select **Docker REPL (pirate-lang)**
+
+> [!NOTE]
+> The REPL session is named `pirate-lang-docker`, if the status bar still says `pairate-lang` it is because you still have that repl connected. Since it is targeting the same files, the auto-route doesn't know which one, but you can manually select the session to target by clicking the session button in the status bar and pinning a session.
 
 ### shadow-w-backend: Mini Fullstack App
 
 A tiny but complete full-stack app following Thomas Heller's [Fullstack Workflow with shadow-cljs](https://code.thheller.com/blog/shadow-cljs/2024/10/18/fullstack-cljs-workflow-with-shadow-cljs.html). Clojure backend + ClojureScript frontend, hot-reloading on both sides.
 
 **Start it:**
-1. Calva Jack-in -> **Shadow fullstack**
-2. In the `backend` REPL session, evaluate `(go!)` to start the Jetty server
-3. Open [localhost:3000](http://localhost:3000)
+* Open [repl.clj](projects/shadow-w-backend/src/dev/repl.clj)
+1. Jack-in: (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>C</kbd> <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>J</kbd>), then select **Shadow fullstack**
+2. Load the file, and evaluate `(go!)` in the Rich Comment to start the backend
+3. The frontend should be started at [localhost:3000](http://localhost:3000). The most fun way to do it is to click the **Flares** button in the status bar -> **Open URL in Sidebar...** -> Type `http://localhost:3000` and submit.
 
 **What to try:**
-- Edit [server.clj](projects/shadow-w-backend/src/main/acme/server.clj) (backend) or [app.cljs](projects/shadow-w-backend/src/main/acme/frontend/app.cljs) (frontend) and see live changes
-- Use the custom REPL command to reload Clojure code and restart the server
+- Evaluate stuff in [server.clj](projects/shadow-w-backend/src/main/acme/server.clj) (backend) or [app.cljs](projects/shadow-w-backend/src/main/acme/frontend/app.cljs) (e.g.)
 
-The project has its own detailed [README](projects/shadow-w-backend/README.md): read it for the full story. Java is the only requirement.
+The project has its own [README](projects/shadow-w-backend/README.md): read it for the full (very short) story. Java is the only requirement.
 
 ### Scittle Tic-Tac-Toe: Interactive Browser Game
 
@@ -86,7 +110,7 @@ A tic-tac-toe game built with Scittle and [Replicant](https://github.com/cjohans
 
 **Start it:**
 1. Run the **Start Dev Environment** build task if not already running (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>)
-2. Calva Connect -> **Scittle Tic-Tac-Toe REPL**
+2. Open the Calva REPL menu, pick **Connect to a running REPL in your project**, then select **Scittle Tic-Tac-Toe REPL**
 3. The game runs in a Joyride Flare (WebView panel in the sidebar)
 
 The source lives in [.joyride/src/scittle-replicant-tic-tac-toe/](.joyride/src/scittle-replicant-tic-tac-toe/).
@@ -135,6 +159,10 @@ For this (and more) to work you need to copy these keybindings to your `keybindi
   "key": "ctrl+alt+j ctrl+alt+s",
   "command": "joyride.runCode",
   "args": "(prezo.next-slide/deactivate!)"
+},
+{
+  "key": "ctrl+alt+j ctrl+alt+m",
+  "command": "markdown.showPreview"
 },
 {
   "key": "right",
@@ -224,7 +252,7 @@ The last one opens the **keybinding palette**: a searchable picker that shows al
 **Try it:**
 1. Run the **Start Dev Environment** build task if not already running (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>)
 2. Open calva.io in a browser with the [Epupp extension](https://github.com/AlfredoProgworx/epupp) and connect it to port 3340
-3. Calva Connect -> **Epupp REPL**
+3. Open the Calva REPL menu, pick **Connect to a running REPL in your project**, then select **Epupp REPL**
 4. Open [live-tampers/calva_io.cljs](live-tampers/calva_io.cljs) and evaluate forms against the page
 
 ## Automation Recipes

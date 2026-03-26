@@ -6,6 +6,36 @@
   "window.zoomLevel": 2,
   "editor.fontSize": 24,
   "markdown.preview.lineHeight": 1.5,
+  "calva.customREPLCommandSnippets": [
+    {
+      "name": "Manifest",
+      "snippet": "(epupp.repl/manifest! $top-level-form)"
+    },
+    {
+      "name": "Upload current Epupp userscript",
+      "snippet": "(epupp.fs/save! ${file-text|pr-str} {:fs/force? true})"
+    },
+    {
+      "key": "t",
+      "name": "Test Current Var",
+      "snippet": "(clojure.test/test-var #'$top-level-defined-symbol)"
+    },
+    {
+      "key": "r",
+      "name": "(clojure.test/run-tests)",
+      "snippet": "(require 'clojure.test) (clojure.test/run-tests)"
+    },
+    {
+      "key": "a",
+      "name": "Add selected dependency/ies",
+      "snippet": "(require '[clojure.repl.deps :refer [add-libs]]) (add-libs '{$selection})"
+    },
+    {
+      "key": "c",
+      "name": "Tap Current Form",
+      "snippet": "(tap> $current-form)"
+    }
+  ],
   "calva.customREPLHoverSnippets": [
     {
       "name": "Eval text on hover",
@@ -17,6 +47,10 @@
       "name": "Shadow fullstack",
       "projectType": "deps.edn",
       "cljsType": "shadow-cljs",
+      "projectRootPath": [
+        "projects",
+        "shadow-w-backend"
+      ],
       "replSessionNames": {
         "primary": "backend",
         "secondary": "frontend"
