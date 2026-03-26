@@ -64,33 +64,28 @@
           skills (get config :sync/skills [])
           agents (get config :sync/agents [])
           prompts (get config :sync/prompts [])
-          instructions (get config :sync/instructions false)]
+          instructions (get config :sync/instructions [])]
       ;; Validate vector types
       (doseq [[k v] [[":sync/joyride-files" joyride-files]
                       [":sync/npm-deps" npm-deps]
                       [":sync/skills" skills]
                       [":sync/agents" agents]
-                      [":sync/prompts" prompts]]]
+                      [":sync/prompts" prompts]
+                      [":sync/instructions" instructions]]]
         (when-not (or (nil? v) (vector? v))
           (throw (ex-info (str k " must be a vector of strings")
                           {:babashka/exit 1
                            :config config}))))
-      ;; Validate boolean types
-      (doseq [[k v] [[":sync/instructions" instructions]]]
-        (when-not (boolean? v)
-          (throw (ex-info (str k " must be a boolean")
-                          {:babashka/exit 1
-                           :config config}))))
       ;; Warn if all empty
       (when (and (empty? joyride-files) (empty? npm-deps) (empty? skills)
-                 (empty? agents) (empty? prompts) (not instructions))
+                 (empty? agents) (empty? prompts) (empty? instructions))
         (println (yellow "⚠ Warning: all sync entries are empty")))
       {:sync/joyride-files (or joyride-files [])
        :sync/npm-deps (or npm-deps [])
        :sync/skills (or skills [])
        :sync/agents (or agents [])
        :sync/prompts (or prompts [])
-       :sync/instructions instructions})))
+       :sync/instructions (or instructions [])})))
 
 ;; File Expansion
 
@@ -317,6 +312,7 @@
   (let [copilot-skills-dir (str (fs/path global-copilot-dir "skills"))
         copilot-agents-dir (str (fs/path global-copilot-dir "agents"))
         copilot-prompts-dir (str (fs/path global-copilot-dir "prompts"))
+        copilot-instructions-dir (str (fs/path global-copilot-dir "instructions"))
         dir-pair (fn [global local]
                    (if (= direction :localize) [global local] [local global]))]
     (cond-> []
@@ -355,13 +351,14 @@
                                     (expand-named-entries source entries ".prompt.md"))
                :concern/config-entries (:sync/prompts config)}))
 
-      (:sync/instructions config)
-      (conj (let [[s t] (dir-pair global-copilot-dir ".github/")]
+      (seq (:sync/instructions config))
+      (conj (let [[s t] (dir-pair copilot-instructions-dir ".github/instructions/")]
               {:concern/name "Instructions"
                :concern/source s
                :concern/target t
-               :concern/expand-fn expand-file-entries
-               :concern/config-entries ["instructions.md"]})))))
+               :concern/expand-fn (fn [source entries]
+                                    (expand-named-entries source entries ".instructions.md"))
+               :concern/config-entries (:sync/instructions config)})))))
 
 (defn- expand-concern [{:concern/keys [expand-fn source config-entries] :as concern}]
   (let [expansion (if (seq config-entries)

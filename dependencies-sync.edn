@@ -6,14 +6,14 @@
                  "jsonc-parser"]
  :sync/skills ["babashka"
                "babashka-tasks"
+               "epupp"
                "joyride"
                "joyride-user-scripts"
                "joyride-workspace-automation"
                "next-slide-editor"]
- :sync/agents ["clojure-architect"
-               "clojure-editor"
+ :sync/agents ["clojure-editor"
                "clojure-interactive-programming"
                "clojure-reviewer"]
  :sync/prompts ["Implement"
-                "principles"]
- :sync/instructions true}
+                "reflect"]
+ :sync/instructions []}
