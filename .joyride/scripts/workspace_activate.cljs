@@ -5,6 +5,7 @@
             prezo.next-slide-notes
             showtime
             flares
+            pastedown
             :reload-all))
 
 (defonce !db (atom {:disposables []}))
@@ -34,6 +35,7 @@
    (showtime/init!))
   (push-disposable
    (flares/init-dashboard-button!))
+  (pastedown/activate!)
   (next-slide/activate!))
 
 (when (= (joyride/invoked-script) joyride/*file*)

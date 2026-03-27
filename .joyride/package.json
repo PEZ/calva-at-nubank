@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "jsonc-parser": "^3.3.1",
-    "posthtml-parser": "^0.12.1"
+    "posthtml-parser": "^0.12.1",
+    "turndown": "^7.2.1",
+    "turndown-plugin-gfm": "^1.0.2"
   }
 }

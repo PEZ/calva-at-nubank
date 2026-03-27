@@ -4,7 +4,9 @@
                       "scripts/keybinding_palette.cljs"
                       "src/pastedown.cljs"]
  :sync/npm-deps ["posthtml-parser"
-                 "jsonc-parser"]
+                 "jsonc-parser"
+                 "turndown"
+                 "turndown-plugin-gfm"]
  :sync/skills ["babashka"
                "babashka-tasks"
                "epupp"
