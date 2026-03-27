@@ -28,6 +28,18 @@
       .-subscriptions
       (.push disposable)))
 
+(defn- open-readme-preview! []
+  (when-let [root-uri (some-> vscode/workspace .-workspaceFolders first .-uri)]
+    (let [readme-uri (vscode/Uri.joinPath root-uri "README.md")
+          all-tabs (mapcat (fn [group] (seq (.-tabs group)))
+                           (-> vscode/window .-tabGroups .-all))
+          preview-open? (some (fn [tab]
+                                (and (.-viewType (.-input tab))
+                                     (= (.-label tab) "Preview README.md")))
+                              all-tabs)]
+      (when-not preview-open?
+        (vscode/commands.executeCommand "markdown.showPreview" readme-uri)))))
+
 (defn- my-main []
   (println "Hello World, from my-main workspace_activate.cljs script")
   (clear-disposables!)
@@ -36,7 +48,8 @@
   (push-disposable
    (flares/init-dashboard-button!))
   (pastedown/activate!)
-  (next-slide/activate!))
+  (next-slide/activate!)
+  (open-readme-preview!))
 
 (when (= (joyride/invoked-script) joyride/*file*)
   (my-main))

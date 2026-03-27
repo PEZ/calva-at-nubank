@@ -1,15 +1,18 @@
 # REPL Workflow Automation with Calva and Joyride
 
-Slides for a presentation I made for Nubank devs on interactive development with Calva, and Joyride. It is also a working project for running the slides. Plus more.
+Slides for a presentation I made for [Nubank](https://nubank.com) devs on interactive development with Calva, and Joyride. It is also a working project for running the slides. Plus more. In fact: *It is a whole Calva REPL Course in the philosophy of **REPLs Everwhere!**.*
 
 ## Run the Presentation
 
-0. Clone this repo
-1. Install [Calva](https://calva.io) and [Joyride](https://github.com/BetterThanTomorrow/joyride) in VS Code
-1. Run `npm install` in the `.joyride/` directory
+0. Install [Calva](https://calva.io) and [Joyride](https://github.com/BetterThanTomorrow/joyride) in VS Code
+1. Clone this repo
+1. In a terminal:
+   1. `cd <the directory you cloned to>/.joyride/`
+   2. `npm install`
 1. Open this workspace in VS Code
+   * You should see this README open in Markdown Preview mode
    * You should see a message: *next-slide activated*
-   * You should see buttons for Flares (a flame icon) and a `00:00` (the `showtime` timer) in the status abar.
+   * In the status bar you should see a button for Flares (a flame icon) and a button showing <kbd>00:00</kbd> (the `showtime` timer).
 1. Copy the [keybindings](#keybindings) to your `keybindings.json`
 1. <kbd>F5</kbd> twice: Will switch to zen and presentation mode showing the first slide. (Or **Home** on your clicker.)
 1. Start the `showtime` timer by clicking on it in the status bar
