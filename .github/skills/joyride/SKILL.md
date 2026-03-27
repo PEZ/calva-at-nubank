@@ -1,6 +1,6 @@
 ---
 name: joyride
-description: 'Write effective Joyride scripts and source files in ClojureScript. Covers VS Code API interop, async/promise handling, data-oriented functional design, REPL-driven development, disposable lifecycle, Flares (WebViews), and extension API access. Use when: writing or editing .cljs files for Joyride, automating VS Code, building interactive tools with the VS Code API, creating Flare WebViews, working with joyride.core or promesa.core, or doing REPL-driven ClojureScript development in VS Code.'
+description: 'Write effective Joyride scripts and source files in ClojureScript. Covers VS Code API interop, async/promise handling, data-oriented functional design, REPL-driven development, disposable lifecycle, Flares (WebViews), and extension API access. Use when: writing or editing .cljs files for Joyride, automating VS Code, building interactive tools with the VS Code API, creating Flare WebViews, fixing or debugging Joyride scripts, troubleshooting async/promise issues, working with joyride.core or promesa.core, or doing REPL-driven ClojureScript development in VS Code.'
 ---
 
 # Joyride — Effective Scripting
