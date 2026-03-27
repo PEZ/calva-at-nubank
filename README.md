@@ -1,6 +1,6 @@
 # REPL Workflow Automation with Calva and Joyride
 
-Slides for a presentation I made for [Nubank](https://nubank.com) devs on interactive development with Calva, and Joyride. It is also a working project for running the slides. Plus more. In fact: *It is a whole Calva REPL Course in the philosophy of **REPLs Everwhere!**.*
+Slides for a presentation I made for [Nubank](https://nubank.com) devs on interactive development with Calva, and Joyride. It is also a working project for running the slides. Plus more. In fact: *It is a whole Calva REPL Course in the philosophy of **REPLs Everywhere!**.*
 
 ## Run the Presentation
 
@@ -62,7 +62,7 @@ This will start three [nREPL](https://nrepl.org/) servers in integrated terminal
 
 * bb nREPL server
 * Scittle REPL
-* Euppup REPL
+* Epupp REPL
 
 ### Connect the Joyride REPL
 
@@ -71,7 +71,7 @@ Because reasons the Joyride REPL can't be started by VS Code Tasks. But you real
 
 It will find the right command for you (**Calva: Start Joyride REPL and Connect**).
 
-You should see the the <kbd>joyride</kbd> REPL session active in the status bar. (<kbd>.md → joyride</kbd>)
+You should see the <kbd>joyride</kbd> REPL session active in the status bar. (<kbd>.md → joyride</kbd>)
 
 ### Jack-in to Babashka
 
@@ -81,7 +81,7 @@ Not strictly a prerequisite for this project, but it is a prerequisite for a [Cl
    1. Select **calva-at-nubank** as Project root
    1. Select **Babashka** as Project Type/Connect Sequence
 
-When Calva can't decide the routing comeption from two session for a given file, the first session will win. The status bar will still show (<kbd>.md → joyride</kbd>) as the active session. Click the session indicator to see that the <kbd>bb</kbd> REPL session is available.
+When Calva can't decide the routing competition from two sessions for a given file, the first session will win. The status bar will still show (<kbd>.md → joyride</kbd>) as the active session. Click the session indicator to see that the <kbd>bb</kbd> REPL session is available.
 
 ### Keybindings
 
@@ -249,7 +249,7 @@ The first one opens the **keybinding palette**: a searchable picker that shows a
 
 ## The Seven REPL Connections
 
-In this project the Calva Jack-in and Connect menu sports five custom [Calva Connect Sequences](https://calva.io/connect-sequences/). We will be connectiong them all, plus Calva's built-in Babashka and Joyride sequences.
+In this project the Calva Jack-in and Connect menu sports five custom [Calva Connect Sequences](https://calva.io/connect-sequences/). We will be connecting them all, plus Calva's built-in Babashka and Joyride sequences.
 
 * **Jack-in**: Calva starts and connects the REPL for you
 * **Connect**: You start the REPL first, then Calva connects to it
@@ -310,7 +310,7 @@ The connect sequence uses a [custom Jack-in command line](https://calva.io/conne
 * Jack-in to the REPL, same as above, but select the **Docker REPL (pirate-lang)** Project Type/Connect Sequence
 
 > [!NOTE]
-> The REPL session is named <kbd>pirate-lang-docker</kbd>, if the status bar still says <kbd>pairate-lang</kbd> it is because you still have that repl connected. Since it is targeting the same files, the auto-route doesn't know which one, but you can manually select the session to target by clicking the session button in the status bar and pinning a session.
+> The REPL session is named <kbd>pirate-lang-docker</kbd>, if the status bar still says <kbd>pirate-lang</kbd> it is because you still have that repl connected. Since it is targeting the same files, the auto-route doesn't know which one, but you can manually select the session to target by clicking the session button in the status bar and pinning a session.
 
 ### shadow-w-backend: Mini Fullstack App
 
@@ -331,7 +331,7 @@ As you navigate between `server.clj` and `app.cljs` you should see the REPL sess
 
 Finally!
 
-### Scittle Tic-Tac-Toe: Replicantin + the Scittle REPL in a Flare
+### Scittle Tic-Tac-Toe: Replicant + the Scittle REPL in a Flare
 
 A tic-tac-toe game built with Scittle and [Replicant](https://github.com/cjohansen/replicant). Runs in a Joyride Flare (WebView panel).
 
@@ -401,7 +401,7 @@ There is also an example Copilot prompt for extending the slide system at [.gith
 
 ### Live Demo Helpers
 
-[live-tampers/calva_io.cljs](live-tampers/calva_io.cljs) has functions for demoing Epupp on [calva.io](https://calva.io). For this you will need Epupp and the SCI Browser REPL server serving the Epupp defaults ports. (You have it running, it is the **Epupp REPL** task).
+[live-tampers/calva_io.cljs](live-tampers/calva_io.cljs) has functions for demoing Epupp on [calva.io](https://calva.io). For this you will need Epupp and the SCI Browser REPL server serving the Epupp default ports. (You have it running, it is the **Epupp REPL** task).
 
 0. Install Epupp (see [Prerequisites](#prerequisites) for links)
 1. Open [calva.io](https://calva.io) in your browser (the Flare you opened earlier won't do)
@@ -413,7 +413,7 @@ There is also an example Copilot prompt for extending the slide system at [.gith
 1. Load the file
 1. Play with the Rich Comment Form at the bottom of the file:
 
-It is not just for jokes. If you ask Copilot about Calva and tell it to use the **Epupp** REPL for up-to-date info. You will see that some of the functions are quite helpful for the bot.
+It is not just for jokes. If you ask Copilot about Calva and tell it to use the **Epupp** REPL for up-to-date info, you will see that some of the functions are quite helpful for the bot.
 
 - `(search! "jack-in")`: opens the MkDocs search overlay
 - `(go! 0)`: navigates to a search result
@@ -425,7 +425,7 @@ It is not just for jokes. If you ask Copilot about Calva and tell it to use the 
 
 ### Userscripts
 
-Taking the **calva.ip dark mode** joke further. You can install it as an auto-running userscript. What's even better: You can do it from the REPL.
+Taking the **calva.io dark mode** joke further. You can install it as an auto-running userscript. What's even better: You can do it from the REPL.
 
 0. With the Epupp REPL still connected in the Browser and in VS Code
 1. In the Epupp popup, enable **Allow REPL FS Sync for this tab**
@@ -440,11 +440,11 @@ The Epupp popup UI has a button for deleting the script. Epupp also has a Develo
 1. Click the **Epupp** tab
 1. From the Epupp popup UI, click the **inspect** button instead of **delete**.
 
-The panel editor also lets you install scripts. And there are also more ways to install scripts, to much for this already long README...
+The panel editor also lets you install scripts. And there are also more ways to install scripts, too much for this already long README...
 
 ### Learn about Epupp
 
-* https://github.com/PEZ/epupp: For info about Epupp and how to use
+* https://github.com/PEZ/epupp: For info about Epupp and how to use it
 * https://youtu.be/CuEWN5yYVa8: For a demo of Copilot creating a really useful userscript
 * https://github.com/PEZ/my-epupp-hq for a template home for your Epupp adventures and for managing your userscripts (it uses `bb` tasks for syncing to and from Epupp)
 
@@ -461,7 +461,7 @@ The wrapper script:
 bb --config ~/.config/bbg/bb.edn "$@"
 ```
 
-The [slides/bbg.md](slides/bbg.md) slide covers the full recipe. For a working example, you can copy as much and as little you want from, see my personal bbg tasks: [github.com/PEZ/my-bbg](https://github.com/PEZ/my-bbg). It has several nifty tasks (including an `mdq` Markdown query tool).
+The [slides/bbg.md](slides/bbg.md) slide covers the full recipe. For a working example, see my personal bbg tasks: [github.com/PEZ/my-bbg](https://github.com/PEZ/my-bbg). It has several nifty tasks (including an `mdq` Markdown query tool).
 
 ### Workspace <-> Global Sync (bb localize / bb globalize)
 
