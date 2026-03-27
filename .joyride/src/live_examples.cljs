@@ -18,9 +18,13 @@
                                             (str "You clicked: " button)
                                             "You dismissed the message")))
 
-  ;; A way to toggle line numbers
+  ;; A way to toggle line numbers (per-editor, works in Zen Mode)
   (set! (.-lineNumbers vscode/window.activeTextEditor.options)
         ({1 0 0 1} (.-lineNumbers vscode/window.activeTextEditor.options)))
+
+  ;; VS Code also has a built-in command for this, but it toggles the
+  ;; persistent setting which gets overridden by zenMode.hideLineNumbers
+  (vscode/commands.executeCommand "editor.action.toggleLineNumbers")
 
   ;; Create a statusbar item, keeping a reference
   (def item (vscode/window.createStatusBarItem

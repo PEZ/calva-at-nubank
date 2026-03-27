@@ -117,26 +117,40 @@ A tic-tac-toe game built with Scittle and [Replicant](https://github.com/cjohans
 
 The source lives in [.joyride/src/scittle-replicant-tic-tac-toe/](.joyride/src/scittle-replicant-tic-tac-toe/).
 
-## Joyride Automation
+## Joyride
+
+Because reasons the Joyride REPL can't be started by VS Code Tasks. But you really should start it.
+* From the command palette, search: **Start joy**.
+
+It will find the right command for you (**Calva: Start Joyride REPL and Connect**).
+
+Then explore [live_examples.cljs](.joyride/src/live_examples.cljs): assorted Joyride patterns (status bar items, information messages, VS Code API demos). It is designed so that you can evaluate one form at a time. E.g. You can use ParEdit to move forward one form at a time and evaluate top level form at each.
+
+1. <kbd>Ctrl</kbd>+<kbd>right</kbd> (Win/Linux) / <kbd>Alt</kbd>+<kbd>right</kbd> (Mac)
+2. <kbd>Alt</kbd>+<kbd>Enter</kbd>
+3. Repeat
+
+**Tip**: This project is configured to hide line numbers. In [live_examples.cljs](.joyride/src/live_examples.cljs) there's a form for toggling them on and off. There's also a keybinding (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>J</kbd> <kbd>L</kbd>) and a custom REPL command (`l`) configured for it. The keybinding uses `joyride.runCode` so it works without an nREPL connection — the REPL command requires the Joyride REPL to be connected.
+
+### Next Slide, Please
 
 This entire project is also a Joyride showcase. The presentation system, the demo tooling, and several general-purpose scripts are all Joyride code.
 
-### Presentation Infrastructure
+#### Presentation Infrastructure
 
 - [next_slide.cljs](.joyride/src/prezo/next_slide.cljs): slide navigator with keyboard shortcuts (arrow keys, page up/down)
 - [next_slide_notes.cljs](.joyride/src/prezo/next_slide_notes.cljs): speaker notes companion
 - [showtime.cljs](.joyride/src/showtime.cljs): status bar timer for tracking presentation time (click to start -> click to stop -> click to restart)
 
-### Flares (WebView Panels)
+#### Flares (WebView Panels)
 
 - [flares.cljs](.joyride/src/flares.cljs): URL picker and sidebar slot manager with history, keybinding-driven
 - [flares_examples.cljs](.joyride/src/flares_examples.cljs): demos: Fibonacci sequences, animated SVG orbits, sidebar panels, Hiccup and HTML rendering
 - [assets/example-flare.edn](assets/example-flare.edn): an EDN Flare with embedded Scittle
 
-### General-Purpose Scripts
+#### The Missing Command Palette
 
-- [keybinding_palette.cljs](.joyride/scripts/keybinding_palette.cljs): a command palette for your keybindings (reads `keybindings.json`, shows a searchable picker)
-- [live_examples.cljs](.joyride/src/live_examples.cljs): assorted Joyride patterns (status bar items, information messages, VS Code API demos)
+- [keybinding_palette.cljs](.joyride/scripts/keybinding_palette.cljs): a command palette for your keybindings (reads `keybindings.json`, shows a searchable picker, uses an npm module for parsing JSONC).
 
 ### Extending with Copilot
 
@@ -206,6 +220,13 @@ For this (and more) to work you need to copy these keybindings to your `keybindi
   "command": "joyride.runCode",
   "args": "(prezo.next-slide/restart!)"
 }
+
+// Toggle line numbers (works in Zen Mode)
+{
+  "key": "ctrl+alt+j l",
+  "command": "joyride.runCode",
+  "args": "(set! (.-lineNumbers vscode/window.activeTextEditor.options) ({1 0 0 1} (.-lineNumbers vscode/window.activeTextEditor.options)))"
+},
 
 // Flares and Utilities
 {

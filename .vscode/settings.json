@@ -34,6 +34,12 @@
       "key": "c",
       "name": "Tap Current Form",
       "snippet": "(tap> $current-form)"
+    },
+    {
+      "key": "l",
+      "name": "Toggle Line Numbers",
+      "snippet": "(set! (.-lineNumbers vscode/window.activeTextEditor.options) ({1 0 0 1} (.-lineNumbers vscode/window.activeTextEditor.options)))",
+      "repl": "joyride"
     }
   ],
   "calva.customREPLHoverSnippets": [
