@@ -21,6 +21,9 @@ Slides for a presentation I made for [Nubank](https://nubank.com) devs on intera
 
 The slide order is defined in [slides.edn](slides.edn). The styling lives in [next-slide.css](next-slide.css). The navigation logic is in [.joyride/src/prezo/next_slide.cljs](.joyride/src/prezo/next_slide.cljs). The workspace has a dedicated [next-slide-editor skill](.github/skills/next-slide-editor/SKILL.md) for getting Copilot help with adding and updating slides.
 
+> [!NOTE]
+> For the slide content to fit nicely, several things play in: Screen size, Markdown font size, and zoom level. I have a Macbook 16 inch screen. The two latter factors are defined in workspace settings. You may want to tweak.
+
 One more fun and nice thing before we dive into the project content, **Open a Joyride flare!**:
 
   1. Click the Flares button in the status bar
