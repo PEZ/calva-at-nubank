@@ -2,19 +2,25 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
 /* Base Styles */
-body {
+body:has(.slide) {
   margin: 0;
   padding: 0;
-  /* padding-top: 20px; */
-  line-height: 1.5;
+
+  & .markdown-body,
+  & .github-markdown-body {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    /* ... */
+  }
 }
 
 /* Override VS Code markdown preview width constraints.
    This CSS is only loaded via markdown.styles on slide decks,
    so unconditional targeting is safe. */
-.markdown-body,
-.github-markdown-body,
-.github-markdown-content {
+.markdown-body:has(.slide),
+.github-markdown-body:has(.slide),
+.github-markdown-content:has(.slide) {
   max-width: 100% !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -22,6 +28,7 @@ body {
   font-size: inherit !important;
   line-height: inherit !important;
 }
+
 
 p.code-line {
   margin-bottom: 0.15rem !important;
@@ -39,24 +46,24 @@ p.code-line {
 }
 
 /* Typography */
-.github-markdown-body h1 {
+.github-markdown-body:has(.slide) h1 {
   margin-top: 0;
   margin-bottom: 20px;
 }
 
-.github-markdown-body h2 {
+.github-markdown-body:has(.slide) h2 {
   margin-top: 0;
   margin-bottom: 15px;
   border: none;
 }
 
 /* Remove top margin from headings when they are the first child */
-h1:first-child,
-h2:first-child,
-h3:first-child,
-h4:first-child,
-h5:first-child,
-h6:first-child {
+h1:first-child:has(.slide),
+h2:first-child:has(.slide),
+h3:first-child:has(.slide),
+h4:first-child:has(.slide),
+h5:first-child:has(.slide),
+h6:first-child:has(.slide) {
   margin-top: 0;
 }
 
@@ -80,18 +87,53 @@ h6:first-child {
 }
 
 /* Grid Column Widths */
-.col-1 { flex: 0 0 8.333%; }
-.col-2 { flex: 0 0 16.666%; }
-.col-3 { flex: 0 0 25%; }
-.col-4 { flex: 0 0 33.333%; }
-.col-5 { flex: 0 0 41.666%; }
-.col-6 { flex: 0 0 50%; }
-.col-7 { flex: 0 0 58.333%; }
-.col-8 { flex: 0 0 66.666%; }
-.col-9 { flex: 0 0 75%; }
-.col-10 { flex: 0 0 83.333%; }
-.col-11 { flex: 0 0 91.666%; }
-.col-12 { flex: 0 0 100%; }
+.col-1 {
+  flex: 0 0 8.333%;
+}
+
+.col-2 {
+  flex: 0 0 16.666%;
+}
+
+.col-3 {
+  flex: 0 0 25%;
+}
+
+.col-4 {
+  flex: 0 0 33.333%;
+}
+
+.col-5 {
+  flex: 0 0 41.666%;
+}
+
+.col-6 {
+  flex: 0 0 50%;
+}
+
+.col-7 {
+  flex: 0 0 58.333%;
+}
+
+.col-8 {
+  flex: 0 0 66.666%;
+}
+
+.col-9 {
+  flex: 0 0 75%;
+}
+
+.col-10 {
+  flex: 0 0 83.333%;
+}
+
+.col-11 {
+  flex: 0 0 91.666%;
+}
+
+.col-12 {
+  flex: 0 0 100%;
+}
 
 /* Responsive Containers - using container queries */
 @container (max-width: 600px) {
@@ -122,7 +164,7 @@ h6:first-child {
 }
 
 /* Keep slide titles left-aligned even in centered slides */
-.slide.center > h1 {
+.slide.center>h1 {
   text-align: left;
   align-self: stretch;
 }
@@ -158,7 +200,7 @@ h6:first-child {
 }
 
 /* Image Handling */
-img {
+.slide img {
   max-width: 100%;
   height: auto;
   object-fit: contain;
@@ -173,7 +215,7 @@ img {
   max-height: 85vh;
 }
 
-img:hover {
+.slide img:hover {
   transform: scale(1.02);
 }
 
@@ -296,13 +338,13 @@ img:hover {
 
 .image-focus img {
   max-height: 60vh;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
 .image-focus img:hover {
   transform: scale(1.03);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 /* Gallery Layout */
@@ -340,7 +382,8 @@ img:hover {
 
 /* Social Media Icons using FontAwesome */
 .social-links {
-  list-style: none; /* Remove bullet points */
+  list-style: none;
+  /* Remove bullet points */
   padding: 0;
   margin: 0;
 }
@@ -366,10 +409,10 @@ ul li:has(> i.fa) li {
 }
 
 /* Icon alignment for auto-detected icon lists */
-ul li > i.fas,
-ul li > i.fab,
-ul li > i.far,
-ul li > i.fa {
+ul li>i.fas,
+ul li>i.fab,
+ul li>i.far,
+ul li>i.fa {
   color: #007acc;
   display: inline-block;
   width: 1.2rem;
@@ -400,7 +443,8 @@ ul li > i.fa {
 }
 
 .social-links li {
-  list-style: none; /* Remove bullet points from list items */
+  list-style: none;
+  /* Remove bullet points from list items */
 }
 
 .social-links a::before {
@@ -408,55 +452,70 @@ ul li > i.fa {
   font-weight: 900;
   margin-right: 8px;
   font-size: 1.1em;
-  color: var(--vscode-foreground); /* Use default text color for icons */
+  color: var(--vscode-foreground);
+  /* Use default text color for icons */
   display: inline-block;
-  width: 1.2em; /* Fixed width for consistent alignment */
-  text-align: center; /* Center the icon within its fixed width */
+  width: 1.2em;
+  /* Fixed width for consistent alignment */
+  text-align: center;
+  /* Center the icon within its fixed width */
 }
 
 .social-links a {
-  color: var(--vscode-textLink-foreground); /* Link color for text only */
-  text-decoration: none; /* Remove underline by default */
-  display: flex; /* Use flexbox for better alignment */
-  align-items: center; /* Vertically center text with icons */
-  margin-bottom: 0.5em; /* Add some spacing between links */
+  color: var(--vscode-textLink-foreground);
+  /* Link color for text only */
+  text-decoration: none;
+  /* Remove underline by default */
+  display: flex;
+  /* Use flexbox for better alignment */
+  align-items: center;
+  /* Vertically center text with icons */
+  margin-bottom: 0.5em;
+  /* Add some spacing between links */
 }
 
 .social-links a:hover {
-  text-decoration: none; /* Keep no underline on hover */
+  text-decoration: none;
+  /* Keep no underline on hover */
 }
 
 /* GitHub */
 .social-links a[href*="github.com"]::before {
-  content: "\f09b"; /* fab fa-github */
+  content: "\f09b";
+  /* fab fa-github */
 }
 
 /* Twitter/X */
 .social-links a[href*="x.com"]::before,
 .social-links a[href*="twitter.com"]::before {
-  content: "\f099"; /* fab fa-twitter */
+  content: "\f099";
+  /* fab fa-twitter */
 }
 
 /* LinkedIn */
 .social-links a[href*="linkedin.com"]::before {
-  content: "\f08c"; /* fab fa-linkedin */
+  content: "\f08c";
+  /* fab fa-linkedin */
 }
 
 /* YouTube */
 .social-links a[href*="youtube.com"]::before,
 .social-links a[href*="youtu.be"]::before {
-  content: "\f167"; /* fab fa-youtube */
+  content: "\f167";
+  /* fab fa-youtube */
 }
 
 /* Blog/Website */
 .social-links a[href*="blog."]::before,
 .social-links a[href*="medium.com"]::before {
-  content: "\f09e"; /* fas fa-rss */
+  content: "\f09e";
+  /* fas fa-rss */
 }
 
 /* Generic social fallback */
 .social-links a:not([href*="github.com"]):not([href*="x.com"]):not([href*="twitter.com"]):not([href*="linkedin.com"]):not([href*="youtube.com"]):not([href*="youtu.be"]):not([href*="blog."])::before {
-  content: "\f0c1"; /* fas fa-link */
+  content: "\f0c1";
+  /* fas fa-link */
 }
 
 /* Alternative approach using CSS icons for better control */
@@ -476,20 +535,61 @@ ul li > i.fa {
 
 /* === Vertical Margin Utilities === */
 /* mt-N / mb-N for positive, mtn-N / mbn-N for negative. Units: rem. */
-.mt-0 { margin-top: 0 !important; }
-.mt-1 { margin-top: 1rem !important; }
-.mt-2 { margin-top: 2rem !important; }
-.mt-3 { margin-top: 3rem !important; }
-.mb-0 { margin-bottom: 0 !important; }
-.mb-1 { margin-bottom: 1rem !important; }
-.mb-2 { margin-bottom: 2rem !important; }
-.mb-3 { margin-bottom: 3rem !important; }
-.mtn-1 { margin-top: -1rem !important; }
-.mtn-2 { margin-top: -2rem !important; }
-.mtn-3 { margin-top: -3rem !important; }
-.mbn-1 { margin-bottom: -1rem !important; }
-.mbn-2 { margin-bottom: -2rem !important; }
-.mbn-3 { margin-bottom: -3rem !important; }
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.mt-1 {
+  margin-top: 1rem !important;
+}
+
+.mt-2 {
+  margin-top: 2rem !important;
+}
+
+.mt-3 {
+  margin-top: 3rem !important;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.mb-1 {
+  margin-bottom: 1rem !important;
+}
+
+.mb-2 {
+  margin-bottom: 2rem !important;
+}
+
+.mb-3 {
+  margin-bottom: 3rem !important;
+}
+
+.mtn-1 {
+  margin-top: -1rem !important;
+}
+
+.mtn-2 {
+  margin-top: -2rem !important;
+}
+
+.mtn-3 {
+  margin-top: -3rem !important;
+}
+
+.mbn-1 {
+  margin-bottom: -1rem !important;
+}
+
+.mbn-2 {
+  margin-bottom: -2rem !important;
+}
+
+.mbn-3 {
+  margin-bottom: -3rem !important;
+}
 
 /* === Auto-Column Layout System (cols-*) === */
 /* Use cols-2, cols-3, etc. on any container div.
@@ -508,30 +608,49 @@ ul li > i.fa {
 /* Hide VS Code's injected empty marker divs between content blocks.
    These are <div> elements with class "code-line" but NOT .col.
    Content elements (h1, p, ul) also carry .code-line but are not divs. */
-[class*="cols-"] > div.code-line:not(.col) {
+[class*="cols-"]>div.code-line:not(.col) {
   display: none;
 }
 
 /* Full-width default for all grid items */
-[class*="cols-"] > * {
+[class*="cols-"]>* {
   grid-column: 1 / -1;
 }
 
 /* .col elements become columns */
-[class*="cols-"] > .col {
+[class*="cols-"]>.col {
   grid-column: auto;
 }
 
 /* Equal-width column variants */
-.cols-2 { grid-template-columns: 1fr 1fr; }
-.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.cols-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.cols-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.cols-4 {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
 
 /* Common asymmetric splits */
-.cols-7-5 { grid-template-columns: 7fr 5fr; }
-.cols-5-7 { grid-template-columns: 5fr 7fr; }
-.cols-8-4 { grid-template-columns: 8fr 4fr; }
-.cols-4-8 { grid-template-columns: 4fr 8fr; }
+.cols-7-5 {
+  grid-template-columns: 7fr 5fr;
+}
+
+.cols-5-7 {
+  grid-template-columns: 5fr 7fr;
+}
+
+.cols-8-4 {
+  grid-template-columns: 8fr 4fr;
+}
+
+.cols-4-8 {
+  grid-template-columns: 4fr 8fr;
+}
 
 /* Custom property escape hatch for exotic layouts:
    <div class="slide cols" style="--cols: 3fr 6fr 3fr"> */
@@ -540,18 +659,29 @@ ul li > i.fa {
   grid-template-columns: var(--cols, 1fr 1fr);
   gap: 0.5rem;
 }
-.cols > div.code-line:not(.col) { display: none; }
-.cols > * { grid-column: 1 / -1; }
-.cols > .col { grid-column: auto; }
+
+.cols>div.code-line:not(.col) {
+  display: none;
+}
+
+.cols>* {
+  grid-column: 1 / -1;
+}
+
+.cols>.col {
+  grid-column: auto;
+}
 
 /* Responsive: stack columns on narrow containers */
 @container (max-width: 600px) {
+
   [class*="cols-"],
   .cols {
     grid-template-columns: 1fr !important;
   }
-  [class*="cols-"] > .col,
-  .cols > .col {
+
+  [class*="cols-"]>.col,
+  .cols>.col {
     grid-column: 1 / -1;
   }
 }
@@ -562,13 +692,22 @@ ul li > i.fa {
   border-radius: 12px;
   margin-bottom: 20px;
 }
-.callout-blue { background: rgba(0, 120, 255, 0.1); }
-.callout-green { background: rgba(0, 255, 0, 0.1); }
-.callout-purple { background: rgba(106, 90, 205, 0.1); }
 
-.slide strong, .slide code {
+.callout-blue {
+  background: rgba(0, 120, 255, 0.1);
+}
+
+.callout-green {
+  background: rgba(0, 255, 0, 0.1);
+}
+
+.callout-purple {
+  background: rgba(106, 90, 205, 0.1);
+}
+
+strong,
+code {
   color: #FFA657;
-  /* var(--vscode-textPreformat-foreground); */
 }
 
 /* Code block wrapping — prevent long lines from pushing columns */
@@ -598,7 +737,8 @@ ul li > i.fa {
     overflow: visible;
   }
 
-  .scroller, .content-area {
+  .scroller,
+  .content-area {
     overflow: visible;
     max-height: none;
   }

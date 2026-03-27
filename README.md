@@ -4,19 +4,20 @@ Slides for a presentation I made for Nubank devs on interactive development with
 
 ## Run the Presentation
 
-1. Clone this repo
-2. Install [Calva](https://calva.io) and [Joyride](https://github.com/BetterThanTomorrow/joyride) in VS Code
-3. Run `npm install` in the `.joyride/` directory
-4. Copy the [keybindings](#keybindings) to your `keybindings.json`
-5. Open this workspace in VS Code
-6. <kbd>F5</kbd> twice: Will switch to zen and presentation mode showing the first slide.
-7. Navigate with arrow keys (left/right)
+0. Clone this repo
+1. Install [Calva](https://calva.io) and [Joyride](https://github.com/BetterThanTomorrow/joyride) in VS Code
+1. Run `npm install` in the `.joyride/` directory
+1. Copy the [keybindings](#keybindings) to your `keybindings.json`
+1. Open this workspace in VS Code
+1. <kbd>F5</kbd> twice: Will switch to zen and presentation mode showing the first slide.
+1. Start the `showtime` timer by clicking on it in the status bar
+1. Navigate with arrow keys (left/right)
+1. Switch between show and edit mode for a slide by pressing <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>J</kbd> <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>M</kbd>.
+1. Open a Joyride flare: Click the Flares button in the status bar, select **Open URL in Sidebar...** and submit with `https://calva.io`. Hide the sidebar with <kbd>Cmd/Ctrl</kbd>+<kbd>B</kbd>.
 
 The slide order is defined in [slides.edn](slides.edn). The styling lives in [next-slide.css](next-slide.css). The navigation logic is in [.joyride/src/prezo/next_slide.cljs](.joyride/src/prezo/next_slide.cljs). There's a dedicated [next-slide-editor skill](.github/skills/next-slide-editor/SKILL.md) for adding and updating slides.
 
-Switch between show and edit mode for a slide by pressing <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>J</kbd> <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>M</kbd>.
-
-## What's Here
+## What's in this Box
 
 - **A custom slide deck**: markdown rendered in VS Code with Joyride-powered navigation
 - **3 runnable projects**: a Clojure language playground, a toy full-stack ClojureScript app, and an interactive Scittle game
@@ -24,7 +25,9 @@ Switch between show and edit mode for a slide by pressing <kbd>Ctrl</kbd>+<kbd>A
 - **Custom REPL commands**: bundled in the workspace settings for testing, Epupp userscript upload, dependency management, and more
 - **Joyride automation**: the presentation system itself, WebView panels (Flares), browser tampering, a keybinding palette, and more
 - **Copilot customization**: agents, skills, and custom instructions relevant for the content of this project
-- **Automation recipes**: global Babashka tasks (bbg). Local bb `localize`/`globalize` sync tasks that I created to pack some of my global scripts into the project. You can use `globalize` to get the scripts and config from the project to your user config.
+- **Babashka Automation recipe**: global Babashka tasks (bbg)
+- Babashka `bb-nrepl` task to start a bb repl in a Calva Connect friendly way
+- Local Babashka `localize`/`globalize` sync tasks that I created to pack some of my global scripts into the project. You can use `globalize` to get the scripts and config from the project to your user config.
 
 ## Prerequisites
 
@@ -97,7 +100,7 @@ A tiny but complete full-stack app following Thomas Heller's [Fullstack Workflow
 * Open [repl.clj](projects/shadow-w-backend/src/dev/repl.clj)
 1. Jack-in: (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>C</kbd> <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>J</kbd>), then select **Shadow fullstack**
 2. Load the file, and evaluate `(go!)` in the Rich Comment to start the backend
-3. The frontend should be started at [localhost:3000](http://localhost:3000). The most fun way to do it is to click the **Flares** button in the status bar -> **Open URL in Sidebar...** -> Type `http://localhost:3000` and submit.
+3. The frontend should be started at [localhost:3000](http://localhost:3000). The most fun way to do it is to click the **Flares** button in the status bar -> **Open URL in Sidebar...** -> Type `http://localhost:3000` and submit. The Flare manager script is in [.joyride/src/flares.cljs](.joyride/src/flares.cljs).
 
 **What to try:**
 - Evaluate stuff in [server.clj](projects/shadow-w-backend/src/main/acme/server.clj) (backend) or [app.cljs](projects/shadow-w-backend/src/main/acme/frontend/app.cljs) (e.g.)
@@ -123,7 +126,7 @@ This entire project is also a Joyride showcase. The presentation system, the dem
 
 - [next_slide.cljs](.joyride/src/prezo/next_slide.cljs): slide navigator with keyboard shortcuts (arrow keys, page up/down)
 - [next_slide_notes.cljs](.joyride/src/prezo/next_slide_notes.cljs): speaker notes companion
-- [showtime.cljs](.joyride/src/showtime.cljs): status bar timer for tracking presentation time
+- [showtime.cljs](.joyride/src/showtime.cljs): status bar timer for tracking presentation time (click to start -> click to stop -> click to restart)
 
 ### Flares (WebView Panels)
 
