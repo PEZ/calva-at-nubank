@@ -57,6 +57,13 @@ p.code-line {
   border: none;
 }
 
+/* Let keycaps use the surrounding emphasis/text color from the markdown theme. */
+.markdown-body kbd,
+.github-markdown-body kbd,
+.github-markdown-content kbd {
+  color: #FFA657 !important;
+}
+
 /* Remove top margin from headings when they are the first child */
 h1:first-child:has(.slide),
 h2:first-child:has(.slide),

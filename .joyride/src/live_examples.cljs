@@ -11,6 +11,9 @@
 (comment
 
   ;; Show an information message and handle the button clicked
+
+  :start/here
+
   (p/let [button (vscode/window.showInformationMessage "Hello from Joyride!"
                                                        "OK"
                                                        "Cancel")]
