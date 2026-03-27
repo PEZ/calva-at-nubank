@@ -237,7 +237,10 @@ The first one opens the **keybinding palette**: a searchable picker that shows a
 
 ## The Seven REPL Connections
 
-When you open the Calva REPL menu, you get five custom [Calva Connect Sequences](https://calva.io/connect-sequences/) plus Calva's built-in Babashka and Joyride sequences. Three use **Jack-in** (Calva starts the REPL for you), three use **Connect** (you start the REPL first, then Calva connects to it), and Joyride has its own dedicated start command.
+In this project the Calva Jack-in and Connect menu sports five custom [Calva Connect Sequences](https://calva.io/connect-sequences/). We will be connectiong them all, plus Calva's built-in Babashka and Joyride sequences.
+
+* **Jack-in**: Calva starts and connects the REPL for you
+* **Connect**: You start the REPL first, then Calva connects to it
 
 The custom sequences are defined in [settings](.vscode/settings.json).
 
@@ -251,10 +254,10 @@ The custom sequences are defined in [settings](.vscode/settings.json).
 | **Babashka REPL** | Connect | Babashka (built-in sequence) | Workspace scripting and tasks | auto (`bb/.nrepl-port`) |
 | **Joyride REPL** | Calva dedicated command | Joyride (built-in) | Make VS Code Truly Yours | auto |
 
-The three **Connect** sequences require the background REPLs to be running first. Run the **Start Dev Environment** build task (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>) to start all three.
+The three **Connect** sequences require the background REPLs to be running first. You did that as part of prerequisites, right? ([Start the Build Task](#start-the-build-task))
 
 > [!NOTE]
-> You can have multiple connections open simultaneously. Calva routes files to the right REPL automatically. (Plus you can pin a session.) With Calva Backseat Driver the AI agent has tools to list the sequences.
+> Since a few months ago you can have multiple connections open simultaneously. Calva routes files to the right REPL automatically. (Plus you can pin a session.) With Calva Backseat Driver the AI agent has tools to list the sequences.
 
 ## The Projects
 
