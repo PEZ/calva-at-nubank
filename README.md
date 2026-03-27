@@ -14,9 +14,9 @@ Slides for a presentation I made for Nubank devs on interactive development with
 1. <kbd>F5</kbd> twice: Will switch to zen and presentation mode showing the first slide. (Or **Home** on your clicker.)
 1. Start the `showtime` timer by clicking on it in the status bar
 1. Navigate with arrow keys (left/right)
-1. Switch between show and edit mode for a slide by pressing <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>J</kbd> <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>M</kbd>.
+1. Switch between show and edit mode for a slide by pressing <kbd>⌃</kbd><kbd>⌥</kbd><kbd>J</kbd>, <kbd>⌃</kbd><kbd>⌥</kbd><kbd>M</kbd>.
 1. Open a Joyride flare: Click the Flares button in the status bar, select **Open URL in Sidebar...** and submit with `https://calva.io`.
-   * Hide the sidebar with <kbd>Cmd/Ctrl</kbd>+<kbd>B</kbd>.
+   * Hide the sidebar with <kbd>⌘</kbd><kbd>B</kbd>.
 
 The slide order is defined in [slides.edn](slides.edn). The styling lives in [next-slide.css](next-slide.css). The navigation logic is in [.joyride/src/prezo/next_slide.cljs](.joyride/src/prezo/next_slide.cljs). The workspace has a dedicated [next-slide-editor skill](.github/skills/next-slide-editor/SKILL.md) for getting Copilot help with adding and updating slides.
 
@@ -47,7 +47,7 @@ Depending on what you want to play with.
 
 ### Start the Build Task
 
-1. Run the **Start Dev Environment** task: (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>)
+1. Run the **Start Dev Environment** task: (<kbd>⌃</kbd><kbd>⇧</kbd><kbd>B</kbd>)
 
 This will start three nREPL servers in integrated terminals as VS Code Tasks:
 
@@ -76,7 +76,7 @@ When Calva can't decide the routing comeption from two session for a given file,
 
 ### Keybindings
 
-The slide navigator is activated automatically when the workspace opens (via [workspace_activate.cljs](.joyride/scripts/workspace_activate.cljs)). Use <kbd>F5</kbd> to enter Zen Mode. Press again to start the slideshow. Arrow keys and Page Up/Down navigate between slides. <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Cmd</kbd>+<kbd>Left</kbd> restarts from the first slide.
+The slide navigator is activated automatically when the workspace opens (via [workspace_activate.cljs](.joyride/scripts/workspace_activate.cljs)). Use <kbd>F5</kbd> to enter Zen Mode. Press again to start the slideshow. Arrow keys and Page Up/Down navigate between slides. <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>←</kbd> restarts from the first slide.
 
 For this (and more) to work you need to copy these keybindings to your `keybindings.json`:
 
@@ -277,8 +277,8 @@ The repl-session <kbd>pirate-lang</kbd> should show as active in the status bar.
 - Load the file in the REPL:
   1. Command Palette: **Calva: Load/Evaluate Current File and its Requires/Dependencies**
 - Evaluate some forms
-  * **Top level form:** <kbd>alt/option</kbd>+<kbd>enter</kbd>
-  * **Current form:** <kbd>ctrl</kbd>+<kbd>enter</kbd>
+  * **Top level form:** <kbd>⌥</kbd><kbd>Enter</kbd>
+  * **Current form:** <kbd>⌃</kbd><kbd>Enter</kbd>
 - Evaluate the forms in the first Rich Comment Form as **Top Level Form**
 
 > [!NOTE]
@@ -306,7 +306,7 @@ A tiny but complete full-stack app following Thomas Heller's [Fullstack Workflow
 
 **Start it:**
 * Open [repl.clj](projects/shadow-w-backend/src/dev/repl.clj)
-1. Jack-in: (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>C</kbd> <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>J</kbd>), then select **Shadow fullstack**
+1. Jack-in: (<kbd>⌃</kbd><kbd>⌥</kbd><kbd>C</kbd>, <kbd>⌃</kbd><kbd>⌥</kbd><kbd>J</kbd>), then select **Shadow fullstack**
 2. Load the file, and evaluate `(go!)` in the Rich Comment to start the backend
 3. The frontend should be started at [localhost:3000](http://localhost:3000). The most fun way to do it is to click the **Flares** button in the status bar -> **Open URL in Sidebar...** -> `http://localhost:3000`. The Flare manager script is in [.joyride/src/flares.cljs](.joyride/src/flares.cljs).
 
@@ -342,11 +342,11 @@ When you've tired of playing the game you will want to play it using the REPL. L
 Explore [live_examples.cljs](.joyride/src/live_examples.cljs): assorted Joyride patterns (status bar items, information messages, VS Code API demos). It is designed so that you can evaluate one form at a time. E.g. You can use ParEdit to move forward one form at a time and evaluate top level form at each. With the cursor immediately after `:start/here`:
 
 0. Observe and ponder
-1. <kbd>Ctrl</kbd>+<kbd>right</kbd> (Win/Linux) / <kbd>Alt</kbd>+<kbd>right</kbd> (Mac)
-2. <kbd>Alt</kbd>+<kbd>Enter</kbd>
+1. <kbd>⌃</kbd><kbd>→</kbd> (Win/Linux) / <kbd>⌥</kbd><kbd>→</kbd> (Mac)
+2. <kbd>⌥</kbd><kbd>Enter</kbd>
 3. Repeat from **0**
 
-**Tip**: This project is configured to hide line numbers. In [live_examples.cljs](.joyride/src/live_examples.cljs) there's a form for toggling them on and off. There's also a keybinding (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>J</kbd> <kbd>L</kbd>) and a custom REPL command (`l`) configured for it. The keybinding uses `joyride.runCode` so it works without an nREPL connection, while the custom REPL command requires the <kbd>joyride</kbd> REPL session to be connected.
+**Tip**: This project is configured to hide line numbers. In [live_examples.cljs](.joyride/src/live_examples.cljs) there's a form for toggling them on and off. There's also a keybinding (<kbd>⌃</kbd><kbd>⌥</kbd><kbd>J</kbd>, <kbd>L</kbd>) and a custom REPL command (`l`) configured for it. The keybinding uses `joyride.runCode` so it works without an nREPL connection, while the custom REPL command requires the <kbd>joyride</kbd> REPL session to be connected.
 
 > [!NOTE]
 > VS Code has built in command for toggling line numbers, you say? Fair point, but have you tried it with **Zen Mode** on? Check mate.
@@ -418,7 +418,7 @@ Taking the **calva.ip dark mode** joke further. You can install it as an auto-ru
 0. With the Epupp REPL still connected in the Browser and in VS Code
 1. In the Epupp popup, enable **Allow REPL FS Sync for this tab**
 1. Open [epupp-userscripts/pez/calva_io_darkmode.cljs](epupp-userscripts/pez/calva_io_darkmode.cljs)
-1. From the Calva Custom REPL Commands Palette (<kbd>ctrl+alt/option<+space</kbd> <kbd>ctrl+alt/option<+space</kbd>): Select **Upload current Epupp userscript**
+1. From the Calva Custom REPL Commands Palette (<kbd>⌃</kbd><kbd>⌥</kbd><kbd>Space</kbd>, <kbd>⌃</kbd><kbd>⌥</kbd><kbd>Space</kbd>): Select **Upload current Epupp userscript**
    * In the Epupp popup you should now see the script in the **Auto-run for this page** section
 1. Reload the page
 
