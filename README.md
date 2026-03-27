@@ -53,6 +53,15 @@ This will start three nREPL servers in integrated terminals as VS Code Tasks:
 * Scittle REPL
 * Euppup REPL
 
+### Connect the Joyride REPL
+
+Because reasons the Joyride REPL can't be started by VS Code Tasks. But you really should start it.
+* From the command palette, search: "**Start joy**".
+
+It will find the right command for you (**Calva: Start Joyride REPL and Connect**).
+
+You should see the the <kbd>joyride</kbd> REPL session active in the status bar. (<kbd>.md → joyride</kbd>)
+
 ### Jack-in to Babashka
 
 Not strictly a prerequisite for this project, but it is a prerequisite for a Clojure dev to alway have the Babashka REPL in reach.
@@ -61,7 +70,7 @@ Not strictly a prerequisite for this project, but it is a prerequisite for a Clo
    1. Select **calva-at-nubank** as Project root
    1. Select **Babashka** as Project Type/Connect Sequence
 
-You should see the <kbd>bb</kbd> REPL session active in the status bar. (<kbd>.md → bb</kbd>)
+When Calva can't decide the routing comeption from two session for a given file, the first session will win. The status bar will still show (<kbd>.md → joyride</kbd>) as the active session. Click the session indicator to see that the <kbd>bb</kbd> REPL session is available.
 
 ### Keybindings
 
@@ -74,6 +83,8 @@ For this (and more) to work you need to copy these keybindings to your `keybindi
 
 // The Missing Command Palette
 {
+  "title": "Keybinding Command Palette",
+  "category": "Joyride",
   "key": "ctrl+alt+j ctrl+alt+j",
   "command": "joyride.runCode",
   "args": "(require '[keybinding-palette :as kp] :reload) (kp/show-palette!+)"
@@ -81,62 +92,114 @@ For this (and more) to work you need to copy these keybindings to your `keybindi
 
 // Slide Navigation
 {
+  "title": "Activate Slide Mode",
+  "category": "Next-slide",
   "key": "ctrl+alt+j s",
   "command": "joyride.runCode",
   "args": "(prezo.next-slide/activate!)"
 },
 {
+  "title": "Deactivate Slide Mode",
+  "category": "Next-slide",
   "key": "ctrl+alt+j ctrl+alt+s",
   "command": "joyride.runCode",
   "args": "(prezo.next-slide/deactivate!)"
 },
 {
+  "title": "Show Markdown Preview",
+  "category": "Next-slide",
   "key": "ctrl+alt+j ctrl+alt+m",
   "command": "markdown.showPreview"
 },
 {
+  "title": "Next Slide",
+  "category": "Next-slide",
   "key": "right",
   "command": "joyride.runCode",
   "args": "(prezo.next-slide/next! true)",
   "when": "next-slide:active && !inputFocus"
 },
 {
+  "title": "Previous Slide",
+  "category": "Next-slide",
   "key": "left",
   "command": "joyride.runCode",
   "args": "(prezo.next-slide/next! false)",
   "when": "next-slide:active && !inputFocus"
 },
 {
+  "title": "Next Slide",
+  "category": "Next-slide",
   "key": "pagedown",
   "command": "joyride.runCode",
   "args": "(prezo.next-slide/next! true)",
   "when": "next-slide:active"
 },
 {
+  "title": "Previous Slide",
+  "category": "Next-slide",
   "key": "pageup",
   "command": "joyride.runCode",
   "args": "(prezo.next-slide/next! false)",
   "when": "next-slide:active"
 },
 {
+  "title": "Enter Zen Mode",
+  "category": "Next-slide",
   "key": "F5",
   "command": "workbench.action.toggleZenMode",
   "when": "next-slide:active && !inZenMode"
 },
 {
+  "title": "Show Current Slide",
+  "category": "Next-slide",
   "key": "F5",
   "command": "joyride.runCode",
   "args": "(prezo.next-slide/current!)",
   "when": "next-slide:active && inZenMode"
 },
 {
+  "title": "Restart Presentation",
+  "category": "Next-slide",
   "key": "ctrl+alt+cmd+left",
   "command": "joyride.runCode",
   "args": "(prezo.next-slide/restart!)"
 }
 
+// Speaker Notes
+{
+  "title": "Prepare Speaker Notes",
+  "category": "Next-slide",
+  "key": "ctrl+alt+j ctrl+n",
+  "command": "joyride.runCode",
+  "args": "(prezo.next-slide-notes/prepare!)"
+},
+{
+  "title": "Edit Active Note",
+  "category": "Next-slide",
+  "key": "ctrl+alt+j shift+n",
+  "command": "joyride.runCode",
+  "args": "(prezo.next-slide-notes/edit-active-note!)"
+},
+{
+  "title": "Print Speaker Notes",
+  "category": "Next-slide",
+  "key": "ctrl+alt+j alt+n",
+  "command": "joyride.runCode",
+  "args": "(prezo.next-slide-notes/print!)"
+},
+{
+  "title": "Toggle Speaker Notes",
+  "category": "Next-slide",
+  "key": "ctrl+alt+j ctrl+alt+n",
+  "command": "joyride.runCode",
+  "args": "(prezo.next-slide-notes/toggle!)"
+},
+
 // Toggle line numbers (works in Zen Mode)
 {
+  "title": "Toggle Line Numbers",
+  "category": "Editor",
   "key": "ctrl+alt+j l",
   "command": "joyride.runCode",
   "args": "(set! (.-lineNumbers vscode/window.activeTextEditor.options) ({1 0 0 1} (.-lineNumbers vscode/window.activeTextEditor.options)))"
@@ -144,16 +207,22 @@ For this (and more) to work you need to copy these keybindings to your `keybindi
 
 // Flares and Utilities
 {
+  "title": "Show Flares Picker",
+  "category": "Flares",
   "key": "ctrl+alt+j ctrl+shift+f",
   "command": "joyride.runCode",
   "args": "(do (require '[flares] :reload) (flares/show-flares-picker!+))"
 },
 {
+  "title": "Open URL in Sidebar",
+  "category": "Flares",
   "key": "ctrl+alt+j ctrl+alt+b",
   "command": "joyride.runCode",
   "args": "(do (require '[flares] :reload) (flares/prompt-and-open-url-in-sidebar!+))"
 },
 {
+  "title": "Open URL as Panel",
+  "category": "Flares",
   "key": "ctrl+alt+j alt+b",
   "command": "joyride.runCode",
   "args": "(do (require '[flares] :reload) (flares/prompt-and-open-url-as-panel!+))"
@@ -162,7 +231,7 @@ For this (and more) to work you need to copy these keybindings to your `keybindi
 //// END DEMO BINDINGS ////
 ```
 
-The first one opens the **keybinding palette**: a searchable picker that shows all your keybindings with descriptions. A.k.a. **The Missing Command Palette**. Handy for discovering what's available.
+The first one opens the **keybinding palette**: a searchable picker that shows all your keybindings with descriptions. A.k.a. **The Missing Command Palette**. Like me, you will wonder how you ever coped without it.
 
 ## The Seven REPL Connections
 
@@ -194,14 +263,24 @@ A super silly one-file Clojure project, with a Docker option for isolated develo
 **Start it:**
 * Open [pirate_lang.clj](projects/pirate-lang/src/pez/pirate_lang.clj)
 * From the Command Palette: **Start your project with a REPL and connect (a.k.a. Jack-in)**
-* Select **pirate-lang**
+* Select the **calva-at-nubank/projects/pirate-lang** Project Root
+* Select the **pirate-lang** Project Type/Connect Sequence
 
 The repl-session <kbd>pirate-lang</kbd> should show as active in the status bar.
 
 **What to try:**
+- Load the file in the REPL:
+  1. Command Palette: **Calva: Load/Evaluate Current File and its Requires/Dependencies**
 - Evaluate some forms
+  * **Top level form:** <kbd>alt/option</kbd>+<kbd>enter</kbd>
+  * **Current form:** <kbd>ctrl</kbd>+<kbd>enter</kbd>
+- Evaluate the forms in the first Rich Comment Form as **Top Level Form**
 
-There's not much more to it. 😀
+> [!NOTE]
+> **Rich Comment Form (RCF)** is the `(comment ...)` form.
+> See: https://calva.io/rich-comments/
+
+There's not much more to it. It's a **toy/joke** project. 😀
 
 ### pirate-lang: Dockerized
 
@@ -211,8 +290,7 @@ The connect sequence uses a [custom Jack-in command line](https://calva.io/conne
 
 **Start it:**
 * Open [pirate_lang.clj](projects/pirate-lang/src/pez/pirate_lang.clj)
-* From the Command Palette: **Start your project with a REPL and connect (a.k.a. Jack-in)**
-* Select **Docker REPL (pirate-lang)**
+* Jack-in to the REPL, same as above, but select the **Docker REPL (pirate-lang)** Project Type/Connect Sequence
 
 > [!NOTE]
 > The REPL session is named <kbd>pirate-lang-docker</kbd>, if the status bar still says <kbd>pairate-lang</kbd> it is because you still have that repl connected. Since it is targeting the same files, the auto-route doesn't know which one, but you can manually select the session to target by clicking the session button in the status bar and pinning a session.
@@ -232,25 +310,31 @@ A tiny but complete full-stack app following Thomas Heller's [Fullstack Workflow
 
 As you navigate between `server.clj` and `app.cljs` you should see the REPL sessions <kbd>backend</kbd> and <kbd>frontend</kbd>, respectively, as connected in the status bar. (Unless you have pinned some session as per above. If so unpin!)
 
+## Joyride
+
+Finally!
+
 ### Scittle Tic-Tac-Toe: Replicantin + the Scittle REPL in a Flare
 
 A tic-tac-toe game built with Scittle and [Replicant](https://github.com/cjohansen/replicant). Runs in a Joyride Flare (WebView panel).
 
 **Start it:**
-1. Run the **Start Dev Environment** build task if not already running (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>)
-2. Open the Calva REPL menu, pick **Connect to a running REPL in your project**, then select **Scittle Tic-Tac-Toe REPL**
-3. The game runs in a Joyride Flare (WebView panel in the sidebar)
+1. Open [ttt_flare.cljs](.joyride/src/scittle-replicant-tic-tac-toe/ttt_flare.cljs)
+1. Load the file in the REPL
+1. Evaluate `(replicant-ttt)` in the bottom Rich Comment.
+1. The game runs in a Joyride sidebar Flare (Flare = Major WebView panel convenience)
 
-The source lives in [.joyride/src/scittle-replicant-tic-tac-toe/](.joyride/src/scittle-replicant-tic-tac-toe/).
+When you've tired of playing the game you will want to play it using the REPL. Luckily the Flare is running with a Scittle REPL ready and you have a SCI browser REPL server running (the **Scittle REPL** task):
 
-## Joyride
+1. Connect the **Scittle Tic-Tac-Toe** REPL. Connect running repl, etcetera...
+1. Open [replicant_tictactoe/core.cljs](.joyride/src/scittle-replicant-tic-tac-toe/resources/scittle/replicant_tictactoe/core.cljs)
+   * You should see the REPL session <kbd>tic-tac-toe</kbd> become active
+1. Evaluate the forms in the Rich Comment
+1. Select the RCF and ask Copilot: *Wanna play some tic tac toe in the repl? You start.*
 
-Because reasons the Joyride REPL can't be started by VS Code Tasks. But you really should start it.
-* From the command palette, search: "**Start joy**".
+### Live REPL Examples
 
-It will find the right command for you (**Calva: Start Joyride REPL and Connect**).
-
-Then explore [live_examples.cljs](.joyride/src/live_examples.cljs): assorted Joyride patterns (status bar items, information messages, VS Code API demos). It is designed so that you can evaluate one form at a time. E.g. You can use ParEdit to move forward one form at a time and evaluate top level form at each. With the cursor immediately after `:start/here`:
+Explore [live_examples.cljs](.joyride/src/live_examples.cljs): assorted Joyride patterns (status bar items, information messages, VS Code API demos). It is designed so that you can evaluate one form at a time. E.g. You can use ParEdit to move forward one form at a time and evaluate top level form at each. With the cursor immediately after `:start/here`:
 
 0. Observe and ponder
 1. <kbd>Ctrl</kbd>+<kbd>right</kbd> (Win/Linux) / <kbd>Alt</kbd>+<kbd>right</kbd> (Mac)
@@ -258,6 +342,9 @@ Then explore [live_examples.cljs](.joyride/src/live_examples.cljs): assorted Joy
 3. Repeat from **0**
 
 **Tip**: This project is configured to hide line numbers. In [live_examples.cljs](.joyride/src/live_examples.cljs) there's a form for toggling them on and off. There's also a keybinding (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>J</kbd> <kbd>L</kbd>) and a custom REPL command (`l`) configured for it. The keybinding uses `joyride.runCode` so it works without an nREPL connection, while the custom REPL command requires the <kbd>joyride</kbd> REPL session to be connected.
+
+> [!NOTE]
+> VS Code has built in command for toggling line numbers, you say? Fair point, but have you tried it with **Zen Mode** on? Check mate.
 
 ### Next Slide, Please
 
@@ -267,12 +354,14 @@ This entire project is also a Joyride showcase. The presentation system, the dem
 
 - [next_slide.cljs](.joyride/src/prezo/next_slide.cljs): slide navigator with keyboard shortcuts (arrow keys, page up/down)
 - [next_slide_notes.cljs](.joyride/src/prezo/next_slide_notes.cljs): speaker notes companion
+  * Not mentioned as a prerequisite, but if you have Pandoc installed you can convert the notes to a PDF document
+  * Check the keybindings (and the [Keybindings Palette](#the-missing-command-palette)) for notes related things
 - [showtime.cljs](.joyride/src/showtime.cljs): status bar timer for tracking presentation time (click to start -> click to stop -> click to restart)
 
 #### Flares (WebView Panels)
 
-- [flares.cljs](.joyride/src/flares.cljs): URL picker and sidebar slot manager with history, keybinding-driven
-- [flares_examples.cljs](.joyride/src/flares_examples.cljs): demos: Fibonacci sequences, animated SVG orbits, sidebar panels, Hiccup and HTML rendering
+- [flares.cljs](.joyride/src/flares.cljs): URL picker and sidebar slot manager with history
+- [flares_examples.cljs](.joyride/src/flares_examples.cljs): live REPL demos: Fibonacci sequences, animated SVG orbits, sidebar panels, Hiccup and HTML rendering
 - [assets/example-flare.edn](assets/example-flare.edn): an EDN Flare with embedded Scittle
 
 #### The Missing Command Palette
@@ -285,7 +374,9 @@ This entire project is also a Joyride showcase. The presentation system, the dem
 
 ### Extending with Copilot
 
-There are [Joyride-specific skills](.github/skills/joyride/SKILL.md) for general Joyride development. And an example Copilot prompt for extending the slide system at [.github/prompts/Implement.prompt.md](.github/prompts/Implement.prompt.md).
+There are [Joyride-specific skills](.github/skills/joyride/SKILL.md) for general Joyride development.
+
+There is also an example Copilot prompt for extending the slide system at [.github/prompts/Implement.prompt.md](.github/prompts/Implement.prompt.md). **Try it, please!**
 
 ## Epupp: Browser Tampering
 
@@ -305,8 +396,7 @@ There are [Joyride-specific skills](.github/skills/joyride/SKILL.md) for general
 [epupp-userscripts/pez/calva_io_darkmode.cljs](epupp-userscripts/pez/calva_io_darkmode.cljs): an auto-running dark mode for calva.io. It uses Epupp's metadata system (`{:epupp/auto-run-match "https://calva.io*"}`) to activate automatically.
 
 **Try it:**
-1. Run the **Start Dev Environment** build task if not already running (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>)
-2. Open calva.io in a browser with the [Epupp extension](https://github.com/AlfredoProgworx/epupp) and connect it to port 3340
+1. Open calva.io in a browser with the [Epupp extension](https://github.com/PEZ/epupp) and connect it to port 3340
 3. Open the Calva REPL menu, pick **Connect to a running REPL in your project**, then select **Epupp REPL**
 4. Open [live-tampers/calva_io.cljs](live-tampers/calva_io.cljs) and evaluate forms against the page
 
