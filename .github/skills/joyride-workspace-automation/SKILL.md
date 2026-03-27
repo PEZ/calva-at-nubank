@@ -1,6 +1,6 @@
 ---
 name: joyride-workspace-automation
-description: 'Set up and manage Joyride workspace automation in the .joyride/ directory of a project. Covers workspace_activate.cljs, project-local scripts and source, workspace deps.edn and package.json, clojure-lsp configuration, and classpath precedence over user-level code. Use when: creating or editing files in a workspace .joyride/ directory, setting up workspace activation, adding project-specific Joyride automation, configuring workspace-level dependencies, or deciding between workspace and user scope. IMPORTANT: Also load this skill when PLANNING or DISCUSSING workspace automation setup — not only at the moment of editing files.'
+description: 'Set up and manage Joyride workspace automation in the .joyride/ directory of a project. Covers workspace_activate.cljs, project-local scripts and source, workspace deps.edn and package.json, clojure-lsp configuration, and classpath precedence over user-level code. Use when: creating or editing files in a workspace .joyride/ directory, setting up workspace activation, adding project-specific Joyride automation, configuring workspace-level dependencies, or deciding between workspace and user scope.'
 ---
 
 # Joyride Workspace Automation

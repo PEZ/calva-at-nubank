@@ -1,6 +1,6 @@
 ---
 name: babashka
-description: "Write idiomatic Babashka (bb) scripts and modules. Covers babashka.fs, babashka.process, babashka.cli, babashka.http-client, and built-in namespaces. Use when: writing bb scripts, creating or modifying a task, choosing between shell and process, replacing shell commands with Babashka built-ins, REPL-driven development, or editing .clj files in directories with bb.edn or scripts/ folders. IMPORTANT: Also load this skill when PLANNING or DISCUSSING bb script design — not only at the moment of writing code."
+description: "Write idiomatic Babashka (bb) scripts and modules. Covers babashka.fs, babashka.process, babashka.cli, babashka.http-client, and built-in namespaces. Use when: writing bb scripts, creating or modifying a task, choosing between shell and process, replacing shell commands with Babashka built-ins, REPL-driven development, or editing .clj files in directories with bb.edn or scripts/ folders."
 ---
 
 # Babashka

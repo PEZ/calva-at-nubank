@@ -1,6 +1,6 @@
 ---
 name: next-slide-editor
-description: '**EDITING SKILL** — Create, edit, and style presentation slides for the next-slide system (VS Code markdown preview + CSS + EDN config). USE FOR: creating new slides, editing existing slides, adding slides to a deck, styling slide layouts, extending presentation CSS, choosing slide patterns, fixing slide layout issues. DO NOT USE FOR: slide navigation/runtime (that is next_slide.cljs), audio/narration generation, general markdown editing unrelated to presentations. INVOKES: file system tools (read/write slides, CSS, slides.edn), search tools (discover workspace image paths and existing slide patterns). IMPORTANT: Also load this skill when PLANNING or DISCUSSING slide content or layout — not only at the moment of editing.'
+description: '**EDITING SKILL** — Create, edit, and style presentation slides for the next-slide system (VS Code markdown preview + CSS + EDN config). USE FOR: creating new slides, editing existing slides, adding slides to a deck, styling slide layouts, extending presentation CSS, choosing slide patterns, fixing slide layout issues. DO NOT USE FOR: slide navigation/runtime (that is next_slide.cljs), audio/narration generation, general markdown editing unrelated to presentations. INVOKES: file system tools (read/write slides, CSS, slides.edn), search tools (discover workspace image paths and existing slide patterns).'
 ---
 
 # Next-Slide Editor

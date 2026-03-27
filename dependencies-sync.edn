@@ -1,7 +1,8 @@
 {:sync/joyride-files ["src/showtime.cljs"
                       "src/flares.cljs"
                       "src/prezo/**"
-                      "scripts/keybinding_palette.cljs"]
+                      "scripts/keybinding_palette.cljs"
+                      "src/pastedown.cljs"]
  :sync/npm-deps ["posthtml-parser"
                  "jsonc-parser"]
  :sync/skills ["babashka"

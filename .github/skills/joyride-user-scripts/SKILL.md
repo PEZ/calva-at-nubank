@@ -1,6 +1,6 @@
 ---
 name: joyride-user-scripts
-description: 'Organize and manage Joyride User scripts and source files — the global Joyride directory that applies across all VS Code workspaces. Covers directory structure (scripts/ vs src/), user_activate.cljs, deps.edn and package.json for dependencies, keybinding setup, clojure-lsp configuration, and classpath resolution. Use when: creating or editing files in the Joyride User directory, setting up user activation, adding global keybindings for Joyride functions, configuring user-level dependencies, or organizing user-scoped scripts and source. IMPORTANT: Also load this skill when PLANNING or DISCUSSING user script organization — not only at the moment of editing files.'
+description: 'Organize and manage Joyride User scripts and source files — the global Joyride directory that applies across all VS Code workspaces. Covers directory structure (scripts/ vs src/), user_activate.cljs, deps.edn and package.json for dependencies, keybinding setup, clojure-lsp configuration, and classpath resolution. Use when: creating or editing files in the Joyride User directory, setting up user activation, adding global keybindings for Joyride functions, configuring user-level dependencies, or organizing user-scoped scripts and source.'
 ---
 
 # Joyride User Scripts
