@@ -41,7 +41,9 @@ Depending on what you want to play with.
 - **Node.js**: for Joyride scripting and the automation recipes
 - **Docker**: for the containerized pirate-lang REPL
 - **Babashka** (`bb`): for workspace tasks (`bb localize`, `bb globalize`)
+- [Epupp](https://github.com/PEZ/epupp) browser extension ([Chrome](https://chromewebstore.google.com/detail/bfcbpnmgefiblppimmoncoflmcejdbei), [Firefox](https://addons.mozilla.org/firefox/addon/epupp/)): for browser tampering and live demos
 - [Backseat Driver](https://github.com/BetterThanTomorrow/backseat-driver) extension: for Copilot + Calva REPL integration
+
 
 ### Start the Build Task
 
@@ -384,21 +386,52 @@ There is also an example Copilot prompt for extending the slide system at [.gith
 
 ### Live Demo Helpers
 
-[live-tampers/calva_io.cljs](live-tampers/calva_io.cljs) has functions for demoing Epupp on [calva.io](https://calva.io):
+[live-tampers/calva_io.cljs](live-tampers/calva_io.cljs) has functions for demoing Epupp on [calva.io](https://calva.io). For this you will need Epupp and the SCI Browser REPL server serving the Epupp defaults ports. (You have it running, it is the **Epupp REPL** task).
+
+0. Install Epupp (see [Prerequisites](#prerequisites) for links)
+1. Open [calva.io](https://calva.io) in your browser (the Flare you opened earlier won't do)
+1. Open the Epupp popup (click the Epupp icon in the Browser toolbar)
+1. Click **Connect**
+1. Ensure that **Reconnect connected tabs on navigation** is enabled
+1. Open [live-tampers/calva_io.cljs](live-tampers/calva_io.cljs)
+   * You should see the <kbd>epupp</kbd> REPL session activate
+1. Load the file
+1. Play with the Rich Comment Form at the bottom of the file:
+
+It is not just for jokes. If you ask Copilot about Calva and tell it to use the **Epupp** REPL for up-to-date info. You will see that some of the functions are quite helpful for the bot.
 
 - `(search! "jack-in")`: opens the MkDocs search overlay
 - `(go! 0)`: navigates to a search result
-- `(toggle-dark-mode!)`: toggles a CSS dark mode injection
 - `(navigate! "https://calva.io/")`: navigates to any URL
+- `(toggle-dark-mode!)`: toggles a CSS dark mode injection (the joke part)
+
+> [!NOTE]
+> The Calva site is not an SPA, so the REPL will fully unload when navigating. This can potentially trip the AI up, because it will hang on the REPL response which will never come. This project has a Skill teaching Copilot how to avoid the hang, and what to expect, but it hinges on that it uses the Skill...
 
 ### Userscripts
 
-[epupp-userscripts/pez/calva_io_darkmode.cljs](epupp-userscripts/pez/calva_io_darkmode.cljs): an auto-running dark mode for calva.io. It uses Epupp's metadata system (`{:epupp/auto-run-match "https://calva.io*"}`) to activate automatically.
+Taking the **calva.ip dark mode** joke further. You can install it as an auto-running userscript. What's even better: You can do it from the REPL.
 
-**Try it:**
-1. Open calva.io in a browser with the [Epupp extension](https://github.com/PEZ/epupp) and connect it to port 3340
-3. Open the Calva REPL menu, pick **Connect to a running REPL in your project**, then select **Epupp REPL**
-4. Open [live-tampers/calva_io.cljs](live-tampers/calva_io.cljs) and evaluate forms against the page
+0. With the Epupp REPL still connected in the Browser and in VS Code
+1. In the Epupp popup, enable **Allow REPL FS Sync for this tab**
+1. Open [epupp-userscripts/pez/calva_io_darkmode.cljs](epupp-userscripts/pez/calva_io_darkmode.cljs)
+1. From the Calva Custom REPL Commands Palette (<kbd>ctrl+alt/option<+space</kbd> <kbd>ctrl+alt/option<+space</kbd>): Select **Upload current Epupp userscript**
+   * In the Epupp popup you should now see the script in the **Auto-run for this page** section
+1. Reload the page
+
+The Epupp popup UI has a button for deleting the script. Epupp also has a Development Tools Panel for inspecting, authoring, and live testing Epupp code and userscripts. If you hold off with deleting the script you can:
+
+1. Open the browser dev tools
+1. Click the **Epupp** tab
+1. From the Epupp popup UI, click the **inspect** button instead of **delete**.
+
+The panel editor also lets you install scripts. And there are also more ways to install scripts, to much for this already long README...
+
+### Learn about Epupp
+
+* https://github.com/PEZ/epupp: For info about Epupp and how to use
+* https://youtu.be/CuEWN5yYVa8: For a demo of Copilot creating a really useful userscript
+* https://github.com/PEZ/my-epupp-hq for a template home for your Epupp adventures and for managing your userscripts (it uses `bb` tasks for syncing to and from Epupp)
 
 ## Automation Recipes
 
@@ -410,16 +443,12 @@ The wrapper script:
 
 ```bash
 #!/usr/bin/env bash
-CALLER_CWD="$(pwd)"
-cd ~/.config/bbg
-bb "$@" --cwd "$CALLER_CWD"
+bb --config ~/.config/bbg/bb.edn "$@"
 ```
 
-Tasks get access to both their own resources (in `~/.config/bbg/`) and the caller's working directory via `--cwd`. Add zsh completions for tab completion of task names and options.
+The [slides/bbg.md](slides/bbg.md) slide covers the full recipe. For a working example, you can copy as much and as little you want from, see my personal bbg tasks: [github.com/PEZ/my-bbg](https://github.com/PEZ/my-bbg). It has several nifty tasks (including an `mdq` Markdown query tool).
 
-The [slides/bbg.md](slides/bbg.md) slide covers the full recipe. For a working example with several tasks (including an `mdq` Markdown query tool), see also my personal bbg tasks: [github.com/PEZ/my-bbg](https://github.com/PEZ/my-bbg).
-
-### Workspace/Global Sync (bb localize / bb globalize)
+### Workspace <-> Global Sync (bb localize / bb globalize)
 
 This workspace uses `bb localize` and `bb globalize` to keep Joyride scripts and Copilot customization files in sync between the workspace and your global user configuration.
 
@@ -430,11 +459,11 @@ bb globalize   # Copy from this workspace back to global
 
 What gets synced is defined in [dependencies-sync.edn](dependencies-sync.edn): Joyride source files, npm deps, Copilot skills, agents, and prompts. The logic lives in [scripts/dependencies_sync.clj](scripts/dependencies_sync.clj).
 
-The idea: develop and refine your automation in one workspace, then `globalize` to make it your default. Next project, `localize` pulls it in. You could imagine extending this to bbg tasks too.
+The idea: develop and refine your automation in one workspace, then `globalize` to make it your default. Next project, `localize` pulls it in. You could imagine extending this to **bbg** tasks too.
 
 The Joyride scripts and Copilot files that `globalize` syncs are general-purpose tools that ideally live at the user level (`~/.config/joyride/` and `~/.copilot/`). Before running `bb globalize`, review [dependencies-sync.edn](dependencies-sync.edn) to see what will be copied and remove any entries you don't want in your global config. After globalizing, you'll also want to:
 
-1. Add the relevant scripts to your Joyride user activation (`~/.config/joyride/scripts/user_activate.cljs`) if they need activation
+1. Add the relevant scripts to your Joyride user activation (`~/.config/joyride/scripts/user_activate.cljs`) if they need activation (only **Pastedown** does, see [PASTEDOWN.md](PASTEDOWN.md))
 2. Run `npm install` in `~/.config/joyride/` to pick up any new npm dependencies
 3. Copy any keybindings you want from the [Keybindings](#keybindings) section to your `keybindings.json`
 4. Remove the globalized scripts and files from this project to avoid conflicts and confusion
@@ -448,8 +477,7 @@ The workspace includes Copilot customization as working examples:
 - [.github/skills/](.github/skills/): domain skills (Babashka, Joyride, Epupp, next-slide-editor, and more)
 - [.github/prompts/](.github/prompts/): reusable prompts
 
-[Backseat Driver](https://github.com/BetterThanTomorrow/backseat-driver) integrates Copilot with Calva's REPL: the AI can evaluate code, do structural editing, and look up symbols. Install the extension and it works.
-
+[Backseat Driver](https://github.com/BetterThanTomorrow/backseat-driver) integrates Copilot with Calva's REPL: the AI can evaluate code, do structural editing, and look up symbols. And it is very easy to use. Install the extension and it works. (It is also quite simple. We're not trading simple for easy here!)
 
 ### Resources
 

@@ -8,7 +8,7 @@
   "markdown.preview.lineHeight": 1.5,
   "calva.customREPLCommandSnippets": [
     {
-      "name": "Manifest",
+      "name": "Load Epupp Manifest",
       "snippet": "(epupp.repl/manifest! $top-level-form)"
     },
     {
