@@ -1,6 +1,6 @@
 ---
 name: babashka-tasks
-description: "Write idiomatic bb.edn tasks: thin wrappers delegating to scripts/*.clj modules. Supports project-level bb and global bbg tasks. Use when: creating or modifying a bb/bbg task, editing bb.edn or scripts/*.clj files, structuring task modules, adding CLI argument parsing, resource lifecycle management, or agent-friendly output patterns."
+description: "Write idiomatic bb.edn tasks: thin wrappers delegating to scripts/*.clj modules. Supports project-level bb and global bbg tasks. Use when: creating or modifying a bb/bbg task, editing bb.edn or scripts/*.clj files, structuring task modules, adding CLI argument parsing, resource lifecycle management, or agent-friendly output patterns. IMPORTANT: Also load this skill when PLANNING or DISCUSSING task design — not only at the moment of editing bb.edn."
 ---
 
 # Babashka Tasks

@@ -21,13 +21,13 @@ The slide order is defined in [slides.edn](slides.edn). The styling lives in [ne
 
 - **A custom slide deck**: markdown rendered in VS Code with Joyride-powered navigation
 - **3 runnable projects**: a Clojure language playground, a toy full-stack ClojureScript app, and an interactive Scittle game
-- **5 REPL connections**: different Clojure/ClojureScript runtimes working simultaneously
+- **6 REPL connections**: different Clojure/ClojureScript/Babashka runtimes working simultaneously
 - **Custom REPL commands**: bundled in the workspace settings for testing, Epupp userscript upload, dependency management, and more
 - **Joyride automation**: the presentation system itself, WebView panels (Flares), browser tampering, a keybinding palette, and more
 - **Copilot customization**: agents, skills, and custom instructions relevant for the content of this project
 - **Babashka Automation recipe**: global Babashka tasks (bbg)
-- Babashka `bb-nrepl` task to start a bb repl in a Calva Connect friendly way
-- Local Babashka `localize`/`globalize` sync tasks that I created to pack some of my global scripts into the project. You can use `globalize` to get the scripts and config from the project to your user config.
+- **Babashka `bb-nrepl` task** to start a bb repl in a Calva Connect friendly way
+- **Local Babashka `localize`/`globalize` sync tasks** that I created to pack some of my global scripts into the project. You can use `globalize` to get the scripts and config from the project to your user config.
 
 ## Prerequisites
 
@@ -40,11 +40,11 @@ Depending on what you want to play with.
 - **Babashka** (`bb`): for workspace tasks (`bb localize`, `bb globalize`)
 - [Backseat Driver](https://github.com/BetterThanTomorrow/backseat-driver) extension: for Copilot + Calva REPL integration
 
-## The Five REPL Connections
+## The Six REPL Connections
 
-When you open the Calva REPL menu, you get five pre-configured  [Calva Connect Sequences](https://calva.io/connect-sequences/). Three use **Jack-in** (Calva starts the REPL for you) and two use **Connect** (you start the REPL first, then Calva connects to it).
+When you open the Calva REPL menu, you get five custom [Calva Connect Sequences](https://calva.io/connect-sequences/) plus Calva's built-in Babashka sequence. Three use **Jack-in** (Calva starts the REPL for you) and three use **Connect** (you start the REPL first, then Calva connects to it).
 
-You find the sequences in [settings](.vscode/settings.json).
+The custom sequences are defined in [settings](.vscode/settings.json).
 
 | Sequence | Mode | Runtime | Use case | Ports |
 |---|---|---|---|---|
@@ -53,12 +53,11 @@ You find the sequences in [settings](.vscode/settings.json).
 | **Docker REPL (pirate-lang)** | Jack-in | JVM Clojure (containerized) | Same project, isolated in Docker (custom Jack-in command) | 7888 |
 | **Epupp REPL** | Connect | Scittle (browser SCI) | Browser tampering, live demos on calva.io | 3339 / 3340 |
 | **Scittle Tic-Tac-Toe REPL** | Connect | Scittle (browser SCI) | Replicant tic-tac-toe game in a Joyride Flare | 1339 / 1340 |
+| **Babashka REPL** | Connect | Babashka (built-in sequence) | Workspace scripting and tasks | auto (`bb/.nrepl-port`) |
 
-The two **Connect** sequences require the background REPLs to be running first. Run the **Start Dev Environment** build task (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>) to start both.
+The three **Connect** sequences require the background REPLs to be running first. Run the **Start Dev Environment** build task (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>) to start all three.
 
 You can have multiple connections open simultaneously. Calva routes files to the right REPL automatically. (Plus you can pin a session.) With Calva Backseat Driver the AI agent has tools to list the sequences.
-
-All sequences are defined in [.vscode/settings.json](.vscode/settings.json) under `calva.replConnectSequences`.
 
 ## The Projects
 

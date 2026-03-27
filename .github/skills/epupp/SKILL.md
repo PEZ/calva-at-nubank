@@ -1,6 +1,6 @@
 ---
 name: epupp
-description: "**BROWSER TAMPERING SKILL** — Live tamper with web pages and write userscripts using Epupp (ClojureScript/Scittle in the browser). USE FOR: REPL-driven page inspection and modification, userscript development with manifests, DOM querying and mutation, injecting UI with Replicant/Reagent, async data fetching, troubleshooting Epupp connections. DO NOT USE FOR: Node.js or JVM ClojureScript, npm package usage, server-side scripting. INVOKES: clojure_evaluate_code, clojure_list_sessions, clojure_repl_output_log (Backseat Driver REPL tools), file system tools (read/write userscripts)."
+description: "**BROWSER TAMPERING SKILL** — Live tamper with web pages and write userscripts using Epupp (ClojureScript/Scittle in the browser). USE FOR: REPL-driven page inspection and modification, userscript development with manifests, DOM querying and mutation, injecting UI with Replicant/Reagent, async data fetching, troubleshooting Epupp connections. DO NOT USE FOR: Node.js or JVM ClojureScript, npm package usage, server-side scripting. INVOKES: clojure_evaluate_code, clojure_list_sessions, clojure_repl_output_log (Backseat Driver REPL tools), file system tools (read/write userscripts). IMPORTANT: Also load this skill when PLANNING or DISCUSSING browser tampering approaches — not only at the moment of REPL interaction."
 ---
 
 # Epupp Assistant
