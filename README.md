@@ -1,6 +1,6 @@
 # REPL Workflow Automation with Calva and Joyride
 
-Slides for a presentation I made for [Nubank](https://nubank.com) devs on interactive development with Calva, and Joyride. It is also a working project for running the slides. Plus more. In fact: *It is a whole Calva REPL Course in the philosophy of **REPLs Everywhere!**.*
+Slides for a presentation I made for [Nubank](https://nubank.com) devs on interactive development with Calva and Joyride. It is also a working project for running the slides. Plus more. In fact: *It is a whole Calva REPL Course in the philosophy of **REPLs Everywhere!**.*
 
 ## Run the Presentation
 
@@ -343,7 +343,7 @@ A tic-tac-toe game built with Scittle and [Replicant](https://github.com/cjohans
 
 When you've tired of playing the game you will want to play it using the REPL. Luckily the Flare is running with a Scittle REPL ready and you have a SCI browser REPL server running (the **Scittle REPL** task):
 
-1. Connect the **Scittle Tic-Tac-Toe** REPL. Connect running repl, etcetera...
+1. Connect the **Scittle Tic-Tac-Toe** REPL. Connect running REPL, etcetera...
 1. Open [replicant_tictactoe/core.cljs](.joyride/src/scittle-replicant-tic-tac-toe/resources/scittle/replicant_tictactoe/core.cljs)
    * You should see the REPL session <kbd>tic-tac-toe</kbd> become active
 1. Evaluate the forms in the Rich Comment
