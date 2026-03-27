@@ -9,6 +9,7 @@
 ```sh
 $ bbg tasks #(e.g.)
 loc    Count lines of code
+bb     Manage bb binary
 clj    Manage clojure installs
 config Manage config repos
 java   Manage Java versions
@@ -22,13 +23,11 @@ java   Manage Java versions
 └─ completions.zsh
 ```
 
-`~/bin/bbg` → `~/.config/bbg/`
+`~/bin/bbg` → `~/.config/bbg/bbg`
 
 ```bash
 #!/usr/bin/env bash
-CALLER_CWD="$(pwd)"
-cd ~/.config/bbg
-bb "$@" --cwd "$CALLER_CWD"
+bb --config ~/.config/bbg/bb.edn "$@"
 ```
 
 </div>
@@ -42,7 +41,7 @@ _bbg() {
         compadd -a tasks
     else
         local task="${words[2]}"
-        local opts=(`bbg tasks | grep "^${task} " | grep -oE '\-\-[a-z-]+'`)
+        local opts=(`bbg -bbg:task-options "$task"`)
         if (( ${#opts} )); then
             compadd -a opts
         fi
@@ -51,17 +50,13 @@ _bbg() {
 compdef _bbg bbg
 ```
 
-
-
-
 `~/.config/bbg/bb.edn`
 
 ```clojure
-  :enter (def cwd (:cwd (cli/parse-opts *command-line-args*)))
-
   loc {:doc "Count lines of code (excludes ...)"
-       :task (loc/count! {:cwd cwd})}
+       :task (loc/count!)}
 ```
 </div>
 
+https://github.com/PEZ/my-bbg
 </div>
