@@ -2,7 +2,12 @@
  :deps  {org.babashka/cli {:mvn/version "0.2.23"}}
  :tasks
  {:requires ([babashka.cli :as cli]
-             [dependencies-sync])
+             dependencies-sync
+             bb-nrepl)
+
+  bb-nrepl {:doc "Start bb nREPL server [--port <n>]"
+            :task (bb-nrepl/start! (cli/parse-opts *command-line-args*
+                                                   bb-nrepl/cli-spec))}
 
   localize  {:doc  "Sync Joyride files and Copilot files from global to workspace. Results written to .tmp/dependencies-sync-result.edn"
              :task (dependencies-sync/sync!
