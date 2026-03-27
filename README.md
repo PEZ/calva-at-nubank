@@ -14,14 +14,20 @@ Slides for a presentation I made for [Nubank](https://nubank.com) devs on intera
    * You should see a message: *next-slide activated*
    * In the status bar you should see a button for Flares (a flame icon) and a button showing <kbd>00:00</kbd> (the `showtime` timer).
 1. Copy the [keybindings](#keybindings) to your `keybindings.json`
-1. <kbd>F5</kbd> twice: Will switch to zen and presentation mode showing the first slide. (Or **Home** on your clicker.)
+1. <kbd>F5</kbd> twice: Will switch to Zen and presentation mode showing the first slide. (Or **Home** on your clicker.)
 1. Start the `showtime` timer by clicking on it in the status bar
 1. Navigate with arrow keys (left/right)
 1. Switch between show and edit mode for a slide by pressing <kbd>⌃</kbd><kbd>⌥</kbd><kbd>J</kbd>, <kbd>⌃</kbd><kbd>⌥</kbd><kbd>M</kbd>.
-1. Open a Joyride flare: Click the Flares button in the status bar, select **Open URL in Sidebar...** and submit with `https://calva.io`.
-   * Hide the sidebar with <kbd>⌘</kbd><kbd>B</kbd>.
 
 The slide order is defined in [slides.edn](slides.edn). The styling lives in [next-slide.css](next-slide.css). The navigation logic is in [.joyride/src/prezo/next_slide.cljs](.joyride/src/prezo/next_slide.cljs). The workspace has a dedicated [next-slide-editor skill](.github/skills/next-slide-editor/SKILL.md) for getting Copilot help with adding and updating slides.
+
+One more fun and nice thing before we dive into the project content, **Open a Joyride flare!**:
+
+  1. Click the Flares button in the status bar
+  2. Select **Open URL in Sidebar...**
+  3. Submit with `https://calva.io`.
+
+Hide the sidebar with <kbd>⌘</kbd><kbd>B</kbd>.
 
 ## What's in this Box
 
@@ -43,7 +49,7 @@ Depending on what you want to play with.
 - **VS Code** with [Calva](https://calva.io) and [Joyride](https://github.com/BetterThanTomorrow/joyride)
 - **Node.js**: for Joyride scripting and the automation recipes
 - **Docker**: for the containerized pirate-lang REPL
-- **Babashka** (`bb`): for workspace tasks (`bb localize`, `bb globalize`)
+- [Babashka](https://babashka.org) (`bb`): for workspace tasks (`bb localize`, `bb globalize`)
 - [Epupp](https://github.com/PEZ/epupp) browser extension ([Chrome](https://chromewebstore.google.com/detail/bfcbpnmgefiblppimmoncoflmcejdbei), [Firefox](https://addons.mozilla.org/firefox/addon/epupp/)): for browser tampering and live demos
 - [Backseat Driver](https://github.com/BetterThanTomorrow/backseat-driver) extension: for Copilot + Calva REPL integration
 
@@ -52,7 +58,7 @@ Depending on what you want to play with.
 
 1. Run the **Start Dev Environment** task: (<kbd>⌃</kbd><kbd>⇧</kbd><kbd>B</kbd>)
 
-This will start three nREPL servers in integrated terminals as VS Code Tasks:
+This will start three [nREPL](https://nrepl.org/) servers in integrated terminals as VS Code Tasks:
 
 * bb nREPL server
 * Scittle REPL
@@ -69,7 +75,7 @@ You should see the the <kbd>joyride</kbd> REPL session active in the status bar.
 
 ### Jack-in to Babashka
 
-Not strictly a prerequisite for this project, but it is a prerequisite for a Clojure dev to alway have the Babashka REPL in reach.
+Not strictly a prerequisite for this project, but it is a prerequisite for a [Clojure](https://clojure.org) dev to always have the [Babashka](https://babashka.org) REPL in reach. 😉
 
 1. Command Palette: **Calva: Connect to a Running REPL Server in the Project**
    1. Select **calva-at-nubank** as Project root
