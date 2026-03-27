@@ -27,7 +27,7 @@ One more fun and nice thing before we dive into the project content, **Open a Jo
   2. Select **Open URL in Sidebar...**
   3. Submit with `https://calva.io`.
 
-Hide the sidebar with <kbd>⌘</kbd><kbd>B</kbd>.
+Hide the sidebar with <kbd>⌃/⌘</kbd><kbd>B</kbd>.
 
 ## What's in this Box
 
@@ -56,7 +56,7 @@ Depending on what you want to play with.
 
 ### Start the Build Task
 
-1. Run the **Start Dev Environment** task: (<kbd>⌃</kbd><kbd>⇧</kbd><kbd>B</kbd>)
+1. Run the **Start Dev Environment** task: (<kbd>⌃/⌘</kbd><kbd>⇧</kbd><kbd>B</kbd>)
 
 This will start three [nREPL](https://nrepl.org/) servers in integrated terminals as VS Code Tasks:
 
@@ -85,7 +85,7 @@ When Calva can't decide the routing comeption from two session for a given file,
 
 ### Keybindings
 
-The slide navigator is activated automatically when the workspace opens (via [workspace_activate.cljs](.joyride/scripts/workspace_activate.cljs)). Use <kbd>F5</kbd> to enter Zen Mode. Press again to start the slideshow. Arrow keys and Page Up/Down navigate between slides. <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>←</kbd> restarts from the first slide.
+The slide navigator is activated automatically when the workspace opens (via [workspace_activate.cljs](.joyride/scripts/workspace_activate.cljs)). Use <kbd>F5</kbd> to enter Zen Mode. Press again to start the slideshow. Arrow keys and Page Up/Down navigate between slides. <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>←</kbd> (Mac) / <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⇧</kbd><kbd>←</kbd> (Win/Linux) restarts from the first slide.
 
 For this (and more) to work you need to copy these keybindings to your `keybindings.json`:
 
@@ -173,6 +173,9 @@ For this (and more) to work you need to copy these keybindings to your `keybindi
   "title": "Restart Presentation",
   "category": "Next-slide",
   "key": "ctrl+alt+cmd+left",
+  "mac": "ctrl+alt+cmd+left",
+  "win": "ctrl+alt+shift+left",
+  "linux": "ctrl+alt+shift+left",
   "command": "joyride.runCode",
   "args": "(prezo.next-slide/restart!)"
 }
